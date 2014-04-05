@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:layout_gravity="center_horizontal|bottom"
+    android:background="#6e5f76"
+    android:padding="0dp">
+            
+    <android.support.v4.view.ViewPager
+	    android:id="@+id/pager"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"/>
+    
+    <LinearLayout 
+        android:id="@+id/navbar_option"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/luv_appbar_bg"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:layout_marginTop="4dp"
+        android:baselineAligned="false"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:alpha="0.8"
+        android:visibility="gone">
+        <LinearLayout 
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:background="@color/white"
+            android:paddingLeft="4dp"
+            android:paddingRight="8dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp">
+            <ImageView
+                android:id="@+id/img_album" 
+	            android:layout_width="32dp"
+	            android:layout_height="32dp"
+	            android:src="@drawable/loading"
+	            android:contentDescription="@string/lb_no_description"
+	            android:visibility="gone"/>
+            
+            <com.p2c.solutions.luvphoto.LuvTextView
+	        	android:id="@+id/appbar_tittle"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="@string/lb_loading"
+		        android:layout_gravity="center_vertical"
+		        android:gravity="center_vertical"
+		        android:textColor="#63546b"
+		        android:paddingLeft="4dp"/>
+            
+        </LinearLayout>
+        
+        <LinearLayout 
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:layout_gravity="right"
+            android:gravity="right"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">            
+            
+            <ImageView	
+                android:id="@+id/btn_facebook"	        
+		        android:layout_width="36dp"
+		        android:layout_height="36dp"
+		        android:contentDescription="@string/lb_no_description"
+		        android:src="@drawable/facebook"/>
+            
+            <ImageView 
+                android:id="@+id/btn_download"
+		        android:layout_width="36dp"
+		        android:layout_height="36dp"
+		        android:contentDescription="@string/lb_no_description"
+		        android:src="@drawable/download"/>
+		        
+		    <ImageView
+		        android:id="@+id/btn_wallpaper"	            	            		        
+		        android:layout_width="36dp"
+		        android:layout_height="36dp"
+		        android:contentDescription="@string/lb_no_description"
+		        android:src="@drawable/wallpaper"/>
+		    
+		    <ImageView
+                android:id="@+id/btn_delete"
+		        android:layout_width="36dp"
+		        android:layout_height="36dp"
+		        android:contentDescription="@string/lb_no_description"
+		        android:src="@drawable/trash"/>
+		    	            
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.p2c.solutions.luvphoto.adapter.itemviews.PhotoItemView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/sc_merchant_logo"
+        android:layout_width="76dp"
+        android:layout_height="76dp"
+        android:contentDescription="@string/lb_no_description"
+        android:padding="1dp"
+	    android:background="#FFFFFF"
+	    android:scaleType="centerCrop"/>
+    
+</com.p2c.solutions.luvphoto.adapter.itemviews.PhotoItemView>

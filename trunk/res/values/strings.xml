@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="luv_webapi_url">http://photos.p2c-solutions.com/api</string>
+          
+    <string name="app_name">Luv Photo</string>
+    
+    <string name="app_id">348440291962992</string>
+    <string name="fb_android_key_hash_debug">ga0RGNYHvNM5d0SLGQfpQWAPGJ8=</string>
+    <string name="fb_android_key_hash_release">0b8Y6Y4RNrRhw6rxKqPbcFxp1Wc=</string>
+            
+    <string name="app_global_global_networkConnectionFailed">Network connection error.</string>
+    <string name="app_global_global_parseWsResultFailed">Parse result error.</string>
+    <string name="app_global_global_parameterWsInvalid">Parameter invalid.</string>
+    <string name="app_global_global_protocolInvalid">Protocol invalid.</string>
+    <string name="app_global_global_data_error">Sorry. Get data error.</string>
+    
+    <string name="action_settings">Settings</string>
+    
+	<string name="lb_about">Luv Photo</string>
+    <string name="lb_aboutDes">Photos have been collected from various sources</string>
+    
+    <string name="lb_no_description"></string>
+    <string name="lb_album">Girl Kute</string>
+    <string name="lb_favorite_photo">Your favorite photos</string>
+    <string name="lb_email">Email</string>
+    <string name="lb_password">Password</string>
+    <string name="lb_login">Login</string>
+    <string name="lb_back">Back</string>
+    <string name="lb_create_new_account">Create new account</string>
+    <string name="lb_register">Register</string>
+    <string name="lb_recovery_password">Recovery password</string>
+    <string name="lb_submit">Submit</string>
+    <string name="lb_your_name">Your name</string>    
+    <string name="lb_name">Name</string>
+    <string name="lb_ok">OK</string>
+    <string name="lb_cancel">Cancel</string>
+    <string name="lb_empty"></string>
+    <string name="lb_refresh">Refresh</string>
+    <string name="lb_share_on_facebook">Share on facebook</string>
+    <string name="lb_add_to_favorite">Add to favorite photo</string>
+    <string name="lb_download_to_gallery">Download to gallery</string>
+    <string name="lb_set_wallpaper">Set wallpaper</string>
+    <string name="lb_loading">Loading ...</string>
+    <string name="lb_first_name">First name</string>
+    <string name="lb_last_name">Last name</string>
+    <string name="lb_date">Date</string>
+    <string name="lb_account_info">Account info</string>
+    <string name="lb_profile_info">Profile info</string>
+    <string name="lb_update_profile">Update profile</string>
+    <string name="lb_facebook">Facebook</string>
+    <string name="lb_download">Download</string>
+    <string name="lb_homescreen">Home screen</string>
+    <string name="lb_favorite">Favorite</string>
+    
+    <string name="validate_email_empty">The email is required.</string>
+    <string name="validate_email_invalid_format">The email invalid format.</string>
+    <string name="validate_password_empty">The password is required.</string>
+    <string name="validate_password_length">The password must be 6 to 32 character.</string>
+    
+    <string name="msg_login_incorrect_account">Username or password incorrect!</string>
+    <string name="msg_register_success">Register success. You can login now.</string>
+    <string name="msg_register_unsuccess">Register not success.</string>
+    <string name="msg_update_profie_success">Update success.</string>
+    <string name="msg_update_profie_unsuccess">Update not success.</string>
+    <string name="msg_register_email_exists">Your email is exist.</string>
+    <string name="msg_recovery_success">Please check mailbox to renew password.</string>
+    <string name="msg_recovery_email_not_exists">Email not exist.</string>
+    <string name="msg_photo_list_empty">No photo in this album.</string>
+    <string name="msg_photo_not_found">Cannot find photo.</string>
+    <string name="msg_set_wallpaper_success">Set photo to wallpaper success.</string>
+    <string name="msg_set_wallpaper_unsuccess">Set photo to wallpaper not success.</string>
+    <string name="msg_download_photo_success">Photo download success</string>
+    <string name="msg_download_photo_unsuccess">Photo download not success</string>
+    <string name="msg_share_photo_facebook_success">Photo have been share to facebook.</string>
+    <string name="msg_share_photo_facebook_unsuccess">Photo cannot share to facebook.</string>
+    <string name="msg_add_favorite_success">Photo have been add to your favorite photo.</string>
+    <string name="msg_add_favorite_unsuccess">Photo cannot add photo to your favorice photo.</string>   
+    <string name="msg_list_items_null">Not found any item.</string>
+    <string name="msg_error">Error.</string> 
+    <string name="msg_favorite_photo_empty">You not have any favorite photo.</string>   
+</resources>
