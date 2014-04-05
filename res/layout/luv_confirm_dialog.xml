@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="#86d2c6">
+ 
+    	<com.p2c.solutions.luvphoto.LuvTextView
+	        android:id="@+id/tvTitle"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:textColor="#FFF"
+	        android:background="#6aa79f"
+	        android:paddingLeft="5dp"
+	        android:paddingRight="5dp"
+	        android:paddingTop="10dp"
+	        android:paddingBottom="10dp"/> 
+    	
+    	<com.p2c.solutions.luvphoto.LuvTextView
+	        android:id="@+id/tvContent"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:textColor="#FFFFFF"
+	        android:paddingLeft="5dp"
+	        android:paddingRight="5dp"
+	        android:paddingTop="10dp"
+	        android:paddingBottom="10dp"/>
+    	
+    	<LinearLayout 
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal"
+	        android:layout_gravity="center_horizontal"
+	        android:gravity="center_horizontal"
+	        >
+	        
+	        <com.p2c.solutions.luvphoto.LuvButton
+	            android:id="@+id/dialogButtonOK"
+		        android:layout_width="110dp"
+		        android:layout_height="26dp"
+		        android:layout_gravity="center_horizontal"
+		        android:gravity="center_horizontal"
+		        android:text="@string/lb_ok"
+		        android:textColor="#FFFFFF"
+		        android:background="#63546b"
+		        android:padding="4dp"
+		        android:layout_margin="5dp"
+		        />
+		 
+	        <com.p2c.solutions.luvphoto.LuvButton
+	            android:id="@+id/dialogButtonCancel"
+		        android:layout_width="110dp"
+		        android:layout_height="26dp"
+		        android:layout_gravity="center_horizontal"
+		        android:gravity="center_horizontal"
+		        android:text="@string/lb_cancel"
+		        android:textColor="#FFFFFF"
+		        android:background="#63546b"
+		        android:padding="4dp"
+		        android:layout_margin="5dp"
+		        />
+	    </LinearLayout>    
+</LinearLayout>

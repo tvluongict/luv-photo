@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.p2c.solutions.luvphoto.adapter.itemviews.AlbumItemView xmlns:android="http://schemas.android.com/apk/res/android" 
+	style="@style/AlbumItemStyle">
+    
+    <ImageView 
+        android:id="@+id/album_img"
+	    style="@style/AlbumItemImageStyle"
+	    android:contentDescription="@string/lb_no_description"/>
+	    
+    <com.p2c.solutions.luvphoto.LuvTextView
+        android:id="@+id/album_title"
+        style="@style/AlbumItemTitleStyle"
+        android:textColor="#ffffff"
+        />
+    
+</com.p2c.solutions.luvphoto.adapter.itemviews.AlbumItemView>
+   

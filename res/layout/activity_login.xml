@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_scrollview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_vertical" 
+    android:scrollbars="vertical"
+    android:background="#6e5f76">       
+
+	    <LinearLayout 
+		    android:layout_width="240dp"
+		    android:layout_height="wrap_content"
+		    android:orientation="vertical"
+		    android:layout_gravity="center_horizontal|center_vertical"
+		    android:background="#ffffff"
+		    android:padding="20dp">	
+		    
+		    <com.p2c.solutions.luvphoto.LuvEditText
+		        android:id="@+id/tbx_email"
+	   	        android:layout_width="fill_parent"
+	   	        android:layout_height="wrap_content"
+	   	        android:layout_gravity="center_horizontal"
+	   	        android:hint="@string/lb_email"
+	   	        android:textColor="#6f5d75"
+	   	        android:textColorHint="#6f5d75"
+	   	        android:layout_marginBottom="10dp"
+	   	        android:padding="5dp"
+	   	        android:inputType="textEmailAddress"
+	   	        android:background="#e5e5e5"
+	   	        />	
+	   	            		    
+		    <com.p2c.solutions.luvphoto.LuvEditText
+		        android:id="@+id/tbx_password"
+	   	        android:layout_width="fill_parent"
+	   	        android:layout_height="wrap_content"
+	   	        android:layout_gravity="center_horizontal"
+	   	        android:textColor="#6f5d75"
+	   	        android:textColorHint="#6f5d75"
+	   	        android:layout_marginBottom="10dp"
+	   	        android:inputType="textPassword"
+	   	        android:hint="@string/lb_password"
+	   	        android:padding="5dp"
+	   	        android:background="#e5e5e5"        
+	   	        />
+	        <com.p2c.solutions.luvphoto.LuvButton
+	            android:id="@+id/btn_login"
+		        android:layout_width="fill_parent"
+		        android:layout_height="26dp"
+		        android:layout_gravity="center_horizontal"
+		        android:gravity="center_horizontal"
+		        android:text="@string/lb_login"
+		        android:textColor="#FFFFFF"
+		        android:background="#6f5d75"
+		        android:padding="4dp"
+		        android:layout_marginBottom="10dp"
+		        />
+		    
+	   	   <com.p2c.solutions.luvphoto.LuvTextView
+	            android:id="@+id/btn_register"
+	   	        android:layout_width="wrap_content"
+	   	        android:layout_height="wrap_content"
+	   	        android:layout_gravity="center_horizontal"
+	   	        android:gravity="center_horizontal"
+	   	        android:text="@string/lb_register"
+	   	        android:textColor="#6f5d75"
+	   	        android:inputType="textEmailAddress"
+	   	        android:textSize="12sp"
+	   	        android:layout_marginBottom="10dp"
+	   	        />	
+	   	        
+	        <com.p2c.solutions.luvphoto.LuvTextView
+	            android:id="@+id/btn_recovery"
+	   	        android:layout_width="wrap_content"
+	   	        android:layout_height="wrap_content"
+	   	        android:layout_gravity="center_horizontal"
+	   	        android:gravity="center_horizontal"
+	   	        android:text="@string/lb_recovery_password"
+	   	        android:textColor="#6f5d75"
+	   	        android:inputType="textEmailAddress"
+	   	        android:textSize="12sp"
+	   	        />	
+	    </LinearLayout>	 
+	
+ </ScrollView>    

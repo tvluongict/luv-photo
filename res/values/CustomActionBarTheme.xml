@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"> 
+    <style name="ThemeSelector" parent="android:Theme.Light">
+        <item name="android:windowTitleBackgroundStyle">@style/WindowTitleBackground</item>        
+        <item name="android:actionMenuTextColor">@color/white</item>
+    </style>
+    <style name="WindowTitleBackground">     
+        <item name="android:background">@color/luv_appbar_bg</item>
+    </style>    
+</resources>

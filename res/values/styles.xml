@@ -1,0 +1,78 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <style name="AppbarHome">
+	    <item name="android:layout_width">fill_parent</item>
+	    <item name="android:layout_height">wrap_content</item>
+	    <item name="android:orientation">horizontal</item>
+	    <item name="android:gravity">right</item>
+	    <item name="android:layout_gravity">right</item>
+	    <item name="android:paddingTop">@dimen/luv_page_paddingTop</item>
+	    <item name="android:paddingBottom">@dimen/luv_page_paddingBottom</item>
+	    <item name="android:paddingLeft">@dimen/luv_page_paddingLeft</item>
+	    <item name="android:paddingRight">@dimen/luv_page_paddingRight</item>
+	</style>
+    
+    <style name="AppbarBasic">
+	    <item name="android:layout_width">fill_parent</item>
+	    <item name="android:layout_height">wrap_content</item>
+	    <item name="android:orientation">horizontal</item>
+	    <item name="android:paddingTop">@dimen/luv_page_paddingTop</item>
+	    <item name="android:paddingBottom">@dimen/luv_page_paddingBottom</item>
+	    <item name="android:paddingLeft">@dimen/luv_page_paddingLeft</item>
+	    <item name="android:paddingRight">@dimen/luv_page_paddingRight</item>
+	</style>
+	
+    <style name="AppbarBasicItem">
+	    <item name="android:layout_width">wrap_content</item>
+	    <item name="android:layout_height">wrap_content</item>
+	</style>
+	
+    <style name="AppbarBasicTitle">
+	    <item name="android:layout_width">0dip</item>
+	    <item name="android:layout_height">wrap_content</item>
+	    <item name="android:layout_weight">1</item>
+	    <item name="android:layout_gravity">center_horizontal</item>
+	    <item name="android:textColor">@color/white</item>
+	    <item name="android:gravity">center_horizontal</item>
+	    <item name="android:textSize">@dimen/luv_page_title</item>
+	    <item name="android:padding">@dimen/luv_page_title_padding</item>
+	</style>
+	
+    
+    <style name="ListAlbumItemStyle">
+	    <item name="android:layout_width">fill_parent</item>
+	    <item name="android:layout_height">150dp</item>
+	    <item name="android:layout_gravity">center_vertical</item>	    
+	</style>
+	
+    <style name="AlbumItemStyle">
+	    <item name="android:layout_width">wrap_content</item>
+	    <item name="android:layout_height">wrap_content</item>
+	    <item name="android:orientation">vertical</item>
+	    <item name="android:layout_gravity">center_horizontal</item>
+	    <item name="android:paddingLeft">@dimen/luv_album_item_margin_left</item>
+	    <item name="android:paddingRight">@dimen/luv_album_item_margin_right</item>
+	</style>
+	
+    <style name="AlbumItemImageStyle">
+	    <item name="android:layout_width">@dimen/luv_album_Image_item_width</item>
+	    <item name="android:layout_height">@dimen/luv_album_Image_item_height</item>
+	    <item name="android:layout_gravity">center_horizontal</item>
+	</style>
+	
+    <style name="AlbumItemTitleStyle">
+	    <item name="android:layout_width">wrap_content</item>
+	    <item name="android:layout_height">wrap_content</item>
+	    <item name="android:layout_gravity">center_horizontal</item>
+	    <item name="android:textSize">@dimen/luv_album_title</item>
+	    <item name="android:textColor">@color/luv_album_title</item>
+	</style>
+	
+    <style name="AlbumDividerStyle">
+	    <item name="android:layout_width">@dimen/luv_album_item_margin_left</item>
+	</style>
+	
+    <style name="FullHeightDialog" parent="android:style/Theme.Dialog">
+	   <item name="android:windowNoTitle">true</item>
+	</style>
+</resources>
