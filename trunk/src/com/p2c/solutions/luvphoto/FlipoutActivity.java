@@ -812,6 +812,7 @@ public class FlipoutActivity extends BaseActivity implements OnRefreshListener<G
 	    	super.onBackPressed();
 	}
 	
+	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 	    if (keyCode == KeyEvent.KEYCODE_MENU) {
 	        

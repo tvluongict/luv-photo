@@ -1,96 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
+<RelativeLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:background="#6e5f76">
     
-    <RelativeLayout 
-        android:layout_width="fill_parent"
-        android:layout_height="180dp"
-        android:background="#63546b"
-        android:gravity="center_horizontal">     
-        <LinearLayout 
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_centerInParent="true"
-            android:gravity="center_horizontal">
-            <ImageView 
-			    android:layout_width="80dp"
-			    android:layout_height="80dp"
-			    android:src="@drawable/album" 
-			    android:contentDescription="@string/lb_no_description"			    
-			    />  
-			<com.p2c.solutions.luvphoto.LuvTextView
-			    android:id="@+id/tv_profile_name"
-			    android:layout_width="fill_parent"
-			    android:layout_height="wrap_content"
-			    android:textColor="#FFFFFF"
-			    android:layout_gravity="center_horizontal"
-			    android:gravity="center_horizontal"
-			    android:text="@string/app_name"/>
-        </LinearLayout>  
-    	 
-    	<LinearLayout 
-    	    android:layout_width="fill_parent"
-    	    android:layout_height="wrap_content"
-    	    android:orientation="horizontal"
-    	    android:padding="10dp"
-    	    android:layout_alignParentBottom="true">
-    	    
-    	    <com.p2c.solutions.luvphoto.LuvTextView
-		        android:layout_width="0dip"
-		        android:layout_height="wrap_content"
-		        android:layout_weight="1"
-		        android:textColor="@color/white"
-		        android:gravity="center_horizontal"
-		        android:paddingTop="5dp"
-		        android:paddingBottom="5dp"/>    	    
-    	    <ImageView 
-    	        android:id="@+id/btn_update_profile"
-			    android:layout_width="32dp"
-			    android:layout_height="32dp"
-			    android:src="@drawable/edit" 
-			    android:contentDescription="@string/lb_no_description"
-			    /> 	 
-			<ImageView 
-			    android:id="@+id/btn_capture"
-			    android:layout_width="32dp"
-			    android:layout_height="32dp"
-			    android:src="@drawable/camera" 
-			    android:contentDescription="@string/lb_no_description"
-			    android:layout_marginLeft="4dp"
-			    android:visibility="gone"
-			    /> 
-			<ImageView 
-			    android:id="@+id/btn_logout"
-			    android:layout_width="32dp"
-			    android:layout_height="32dp"
-			    android:src="@drawable/lock" 
-			    android:contentDescription="@string/lb_no_description"
-			    android:layout_marginLeft="4dp"
-			    /> 
-    	</LinearLayout>    	
-    </RelativeLayout>  
-            
-    <com.p2c.solutions.luvphoto.LuvTextView
-        android:id="@+id/tv_account_photo_number"
+    <LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="vertical"
+	    android:background="#6e5f76">
+	    
+	    <RelativeLayout 
+	        android:layout_width="fill_parent"
+	        android:layout_height="180dp"
+	        android:background="#63546b"
+	        android:gravity="center_horizontal">     
+	        <LinearLayout 
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:orientation="vertical"
+	            android:layout_centerInParent="true"
+	            android:gravity="center_horizontal">
+	            <ImageView 
+				    android:layout_width="80dp"
+				    android:layout_height="80dp"
+				    android:src="@drawable/album" 
+				    android:contentDescription="@string/lb_no_description"			    
+				    />  
+				<com.p2c.solutions.luvphoto.LuvTextView
+				    android:id="@+id/tv_profile_name"
+				    android:layout_width="fill_parent"
+				    android:layout_height="wrap_content"
+				    android:textColor="#FFFFFF"
+				    android:layout_gravity="center_horizontal"
+				    android:gravity="center_horizontal"
+				    android:text="@string/app_name"/>
+	        </LinearLayout>  
+	    	 
+	    	<LinearLayout 
+	    	    android:layout_width="fill_parent"
+	    	    android:layout_height="wrap_content"
+	    	    android:orientation="horizontal"
+	    	    android:padding="10dp"
+	    	    android:layout_alignParentBottom="true">
+	    	    
+	    	    <com.p2c.solutions.luvphoto.LuvTextView
+			        android:layout_width="0dip"
+			        android:layout_height="wrap_content"
+			        android:layout_weight="1"
+			        android:textColor="@color/white"
+			        android:gravity="center_horizontal"
+			        android:paddingTop="5dp"
+			        android:paddingBottom="5dp"/>    	    
+	    	    <ImageView 
+	    	        android:id="@+id/btn_update_profile"
+				    android:layout_width="32dp"
+				    android:layout_height="32dp"
+				    android:src="@drawable/edit" 
+				    android:contentDescription="@string/lb_no_description"
+				    /> 	 
+				<ImageView 
+				    android:id="@+id/btn_capture"
+				    android:layout_width="32dp"
+				    android:layout_height="32dp"
+				    android:src="@drawable/camera" 
+				    android:contentDescription="@string/lb_no_description"
+				    android:layout_marginLeft="4dp"
+				    android:visibility="gone"
+				    /> 
+				<ImageView 
+				    android:id="@+id/btn_logout"
+				    android:layout_width="32dp"
+				    android:layout_height="32dp"
+				    android:src="@drawable/lock" 
+				    android:contentDescription="@string/lb_no_description"
+				    android:layout_marginLeft="4dp"
+				    /> 
+	    	</LinearLayout>    	
+	    </RelativeLayout>  
+	            
+	    <com.p2c.solutions.luvphoto.LuvTextView
+	        android:id="@+id/tv_account_photo_number"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="left"
+		    android:textSize="12sp"
+		    android:textColor="#FFFFFF"
+		    android:padding="10dp"/>	        
+		     
+	    <com.handmark.pulltorefresh.library.PullToRefreshGridView
+	        android:id="@+id/lv_account_photo"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:numColumns="5"
+		    android:horizontalSpacing="1dp"
+		    android:verticalSpacing="1dp"
+		    android:stretchMode="columnWidth"
+		    android:gravity="center"
+	        />
+	</LinearLayout>   
+	
+  	<android.support.v4.view.ViewPager
+	    android:id="@+id/pager"
 	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_gravity="left"
-	    android:textSize="12sp"
-	    android:textColor="#FFFFFF"
-	    android:padding="10dp"/>	        
-	     
-    <com.handmark.pulltorefresh.library.PullToRefreshGridView
-        android:id="@+id/lv_account_photo"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:numColumns="5"
-	    android:horizontalSpacing="1dp"
-	    android:verticalSpacing="1dp"
-	    android:stretchMode="columnWidth"
-	    android:gravity="center"
-        />
-</LinearLayout>        
+	    android:layout_height="fill_parent"
+	    android:visibility="gone"/> 
+  	
+  	<LinearLayout 
+  	    android:id="@+id/navbar_option"
+  	    android:layout_width="fill_parent"
+  	    android:layout_height="wrap_content"
+  	    android:background="#6e5f76"
+	    android:layout_alignParentBottom="true"
+	    android:alpha="0.8"
+	    android:visibility="gone"
+	    android:gravity="center_horizontal"
+	    android:paddingTop="30dp"
+	    android:paddingBottom="30dp">
+  	    
+  	    <ImageView	
+	  	    android:id="@+id/btn_facebook"	        
+	        android:layout_width="48dp"
+	        android:layout_height="48dp"
+	        android:contentDescription="@string/lb_no_description"
+	        android:src="@drawable/facebook"
+	        android:layout_margin="6dp"/>
+  	    
+  	    <ImageView
+            android:id="@+id/btn_favorite"
+	        android:layout_width="48dp"
+	        android:layout_height="48dp"
+	        android:contentDescription="@string/lb_no_description"
+	        android:src="@drawable/heart"
+	        android:layout_margin="6dp"/>
+  	    
+  	    <ImageView 
+	        android:id="@+id/btn_download"
+	        android:layout_width="48dp"
+	        android:layout_height="48dp"
+	        android:contentDescription="@string/lb_no_description"
+	        android:src="@drawable/download"
+	        android:layout_margin="6dp"/>
+  	    
+  	    <ImageView
+	        android:id="@+id/btn_wallpaper"	            	            		        
+	        android:layout_width="48dp"
+	        android:layout_height="48dp"
+	        android:contentDescription="@string/lb_no_description"
+	        android:src="@drawable/wallpaper"
+	        android:layout_margin="6dp"/>
+  	    
+  	</LinearLayout>
+  	
+</RelativeLayout>     
