@@ -4,7 +4,7 @@
     android:layout_height="fill_parent"
     android:padding="0dip">
     
-    <com.p2c.solutions.luvphoto.TouchImageViewFlipout
+    <com.p2c.solutions.luvphoto.TouchImageView
 	    android:id="@+id/image"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"/>    

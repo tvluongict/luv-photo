@@ -171,10 +171,10 @@ public class MainActivity extends BaseActivity {
 		//Intent i = new Intent(MainActivity.this, GestureActivity_.class);
 		//startActivity(i);
 		
-		Intent i = new Intent(MainActivity.this, FlipoutActivity_.class);
-		startActivity(i);
+		//Intent i = new Intent(MainActivity.this, FlipoutActivity_.class);
+		//startActivity(i);
 		
-		/*if(loginAccount!=null)
+		if(loginAccount!=null)
 		{
 			Intent i = new Intent(MainActivity.this, AccountActivity_.class);
 			startActivity(i);
@@ -183,7 +183,7 @@ public class MainActivity extends BaseActivity {
 		{
 			Intent i = new Intent(MainActivity.this, LoginActivity_.class);
 			startActivityForResult(i, LOGIN_CODE);
-		}*/
+		}
 	}
 	
 	@Click(R.id.btn_refresh)
