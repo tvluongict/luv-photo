@@ -13,8 +13,6 @@ import com.googlecode.androidannotations.annotations.Click;
 import com.googlecode.androidannotations.annotations.EActivity;
 import com.googlecode.androidannotations.annotations.UiThread;
 import com.googlecode.androidannotations.annotations.ViewById;
-import com.p2c.solutions.luvphoto.R;
-import com.p2c.solutions.luvphoto.core.models.Account;
 import com.p2c.solutions.luvphoto.core.webservices.JsonMessage;
 import com.p2c.solutions.luvphoto.core.webservices.WebServiceInvoker.JsonResult;
 import com.p2c.solutions.luvphoto.helper.AccountHelper;
@@ -51,8 +49,8 @@ public class RecoveryActivity extends BaseActivity{
 			Toast.makeText(this, R.string.validate_email_invalid_format, Toast.LENGTH_LONG).show();
 			return;
 		}
-		showRecoveryAlertDialog();
-		//recoveryProcess(emailValue);
+		
+		recoveryProcess(emailValue);
 	}
 		
 	@Background
@@ -62,15 +60,7 @@ public class RecoveryActivity extends BaseActivity{
 		
 		if(result.getMessage() == JsonMessage.SUCCESSFULL)
 		{
-			Account account = result.parse(Account.class);
-			if(account!=null)
-			{
-				recoverySuccess();
-			}
-			else
-			{
-				showToast(R.string.msg_recovery_email_not_exists);
-			}								
+			recoverySuccess();			
 		}
 		else if(result.getMessage() == JsonMessage.CONNECT_FAILED)
 		{
@@ -92,9 +82,9 @@ public class RecoveryActivity extends BaseActivity{
 	
 	@UiThread
 	void recoverySuccess()
-	{
-		showToast(R.string.msg_recovery_success);
+	{		
 		resetForm();
+		showRecoveryAlertDialog();		
 	}
 	
 	//RESET FORM
@@ -127,19 +117,14 @@ public class RecoveryActivity extends BaseActivity{
 		LuvTextView tvTitle = (LuvTextView) dialog.findViewById(R.id.tvTitle);
 		LuvTextView tvContent = (LuvTextView) dialog.findViewById(R.id.tvContent);
 		
-		tvTitle.setText("Notice");
-		tvContent.setText("An email have been send your mailbox. Please check email and perform renew password.");
-		
+		tvTitle.setText("Success");
+		tvContent.setText("An email have been send your mailbox. Please check email.");	
 		
 		Button dialogButtonOk = (Button) dialog.findViewById(R.id.dialogButtonOK);
 		dialogButtonOk.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					
-					Intent i = new Intent(RecoveryActivity.this, LoginActivity_.class);
-					startActivity(i);
 					finish();
-					
 				}
 			});
 		dialog.show();

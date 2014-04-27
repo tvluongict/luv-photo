@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import android.app.Dialog;
 import android.app.WallpaperManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -56,7 +57,9 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.p2c.solutions.luvphoto.adapter.items.PhotoItem;
 import com.p2c.solutions.luvphoto.core.models.FavoritePhoto;
 import com.p2c.solutions.luvphoto.core.models.Photo;
@@ -132,6 +135,18 @@ public class AccountActivity extends BaseActivity implements OnRefreshListener<G
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 	    lastUpdate = System.currentTimeMillis();
 	    
+	    //OPTION FOR IMAGE LOADER
+  		options = new DisplayImageOptions.Builder()
+  			.showImageForEmptyUri(R.drawable.ic_error)
+  			.showImageOnFail(R.drawable.ic_error)
+  			.resetViewBeforeLoading(true)
+  			.cacheOnDisc(true)
+  			.bitmapConfig(Bitmap.Config.RGB_565)
+  			.considerExifParams(true)
+  			.imageScaleType(ImageScaleType.EXACTLY_STRETCHED)
+  			.displayer(new FadeInBitmapDisplayer(300))			
+  			.build();		
+  		
 		if(loginAccount == null)
 		{
 			Intent i = new Intent(this, LoginActivity_.class);
@@ -192,6 +207,8 @@ public class AccountActivity extends BaseActivity implements OnRefreshListener<G
 		pager.setCurrentItem(pagerPosition);	
 		pager.setOnPageChangeListener(imagePagerAdapter);
 		
+		pager.setPageTransformer(true, new DepthPageTransformer());
+		
 		checkFavoritePhotoProcess(photos.get(pagerPosition));		
 	}
 	
@@ -207,10 +224,13 @@ public class AccountActivity extends BaseActivity implements OnRefreshListener<G
     
     @Override
     protected void onResume() {
-        super.onResume();
+    	super.onResume();
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),SensorManager.SENSOR_DELAY_NORMAL);
         loginAccount = accountHelper.getLoginAccount();
-        showAccountInfo();
+        if(loginAccount!=null)
+        {
+        	showAccountInfo();
+        }        
     }
     
     @Override
@@ -633,6 +653,13 @@ public class AccountActivity extends BaseActivity implements OnRefreshListener<G
 				}
 			});
 		
+		dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {         
+		    @Override
+		    public void onCancel(DialogInterface dialog) {
+		    	setImage(btnDownload, R.drawable.download);
+		    }
+		});
+		
 		dialog.show();
 	}
 	@Background
@@ -722,6 +749,13 @@ public class AccountActivity extends BaseActivity implements OnRefreshListener<G
 				}
 			});
 		
+		dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {         
+		    @Override
+		    public void onCancel(DialogInterface dialog) {
+		    	setImage(btnWallpaper, R.drawable.wallpaper);
+		    }
+		});
+		
 		dialog.show();
 	}
 	@Background
@@ -770,15 +804,16 @@ public class AccountActivity extends BaseActivity implements OnRefreshListener<G
 			
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-				
+			
 		
 		if(requestCode == LOGIN_CODE)
 		{
 			loginAccount = accountHelper.getLoginAccount();				
 			if(loginAccount == null)
 			{
-				Intent i = new Intent(this, LoginActivity_.class);
-				startActivityForResult(i, LOGIN_CODE);
+				//Intent i = new Intent(this, LoginActivity_.class);
+				//startActivityForResult(i, LOGIN_CODE);
+				finish();
 			}
 			else
 			{							
@@ -920,8 +955,8 @@ public class AccountActivity extends BaseActivity implements OnRefreshListener<G
 			
 			imageView.setOnClickListener(new OnClickListener() {
 	            @Override
-	            public void onClick(View v) {	            	
-	            	         	
+	            public void onClick(View v) {
+	            	
 	            	if(navOption.getVisibility() == View.GONE)
 	            	{	     
 	            		Animation animation = AnimationUtils.loadAnimation(AccountActivity.this, R.anim.bottom_in);
@@ -945,26 +980,27 @@ public class AccountActivity extends BaseActivity implements OnRefreshListener<G
 
 				@Override
 				public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+					@SuppressWarnings("unused")
 					String message = null;
 					switch (failReason.getType()) {
 						case IO_ERROR:
-							message = "Input/Output error";
+							message = "Photo is not available.";
 							break;
 						case DECODING_ERROR:
-							message = "Image can't be decoded";
+							message = "Photo is not available.";
 							break;
 						case NETWORK_DENIED:
-							message = "Downloads are denied";
+							message = "Photo is not available.";
 							break;
 						case OUT_OF_MEMORY:
-							message = "Out Of Memory error";
+							message = "Photo is not available.";
 							break;
 						case UNKNOWN:
-							message = "Unknown error";
+							message = "Photo is not available.";
 							break;
 					}
 					
-					Toast.makeText(AccountActivity.this, message, Toast.LENGTH_SHORT).show();
+					//Toast.makeText(AccountActivity.this, message, Toast.LENGTH_SHORT).show();
 					spinner.setVisibility(View.GONE);
 				}
 
@@ -1010,5 +1046,81 @@ public class AccountActivity extends BaseActivity implements OnRefreshListener<G
 			currentPhoto = null;
 			currentPhotoBimap = null;
 		}
-	}	
+	}
+	
+	public class DepthPageTransformer implements ViewPager.PageTransformer {
+	    private static final float MIN_SCALE = 0.75f;
+
+	    public void transformPage(View view, float position) {
+	        int pageWidth = view.getWidth();
+
+	        if (position < -1) { // [-Infinity,-1)
+	            // This page is way off-screen to the left.
+	            view.setAlpha(0);
+
+	        } else if (position <= 0) { // [-1,0]
+	            // Use the default slide transition when moving to the left page
+	            view.setAlpha(1);
+	            view.setTranslationX(0);
+	            view.setScaleX(1);
+	            view.setScaleY(1);
+
+	        } else if (position <= 1) { // (0,1]
+	            // Fade the page out.
+	            view.setAlpha(1 - position);
+
+	            // Counteract the default slide transition
+	            view.setTranslationX(pageWidth * -position);
+
+	            // Scale the page down (between MIN_SCALE and 1)
+	            float scaleFactor = MIN_SCALE
+	                    + (1 - MIN_SCALE) * (1 - Math.abs(position));
+	            view.setScaleX(scaleFactor);
+	            view.setScaleY(scaleFactor);
+
+	        } else { // (1,+Infinity]
+	            // This page is way off-screen to the right.
+	            view.setAlpha(0);
+	        }
+	    }
+	}
+	/*
+	public class ZoomOutPageTransformer implements ViewPager.PageTransformer {
+	    private static final float MIN_SCALE = 0.85f;
+	    private static final float MIN_ALPHA = 0.5f;
+
+	    public void transformPage(View view, float position) {
+	        int pageWidth = view.getWidth();
+	        int pageHeight = view.getHeight();
+
+	        if (position < -1) { // [-Infinity,-1)
+	            // This page is way off-screen to the left.
+	            view.setAlpha(0);
+
+	        } else if (position <= 1) { // [-1,1]
+	            // Modify the default slide transition to shrink the page as well
+	            float scaleFactor = Math.max(MIN_SCALE, 1 - Math.abs(position));
+	            float vertMargin = pageHeight * (1 - scaleFactor) / 2;
+	            float horzMargin = pageWidth * (1 - scaleFactor) / 2;
+	            if (position < 0) {
+	                view.setTranslationX(horzMargin - vertMargin / 2);
+	            } else {
+	                view.setTranslationX(-horzMargin + vertMargin / 2);
+	            }
+
+	            // Scale the page down (between MIN_SCALE and 1)
+	            view.setScaleX(scaleFactor);
+	            view.setScaleY(scaleFactor);
+
+	            // Fade the page relative to its size.
+	            view.setAlpha(MIN_ALPHA +
+	                    (scaleFactor - MIN_SCALE) /
+	                    (1 - MIN_SCALE) * (1 - MIN_ALPHA));
+
+	        } else { // (1,+Infinity]
+	            // This page is way off-screen to the right.
+	            view.setAlpha(0);
+	        }
+	    }
+	}*/
 }

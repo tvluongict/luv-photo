@@ -17,6 +17,7 @@ private static final String NAMESPACE = "FavoritePhoto";
 	private static final String REMOVE_FAVORITE_PHOTO_METHOD = "DeleteFavoritePhoto";
 	private static final String GET_PHOTO_BY_ACCOUNT_METHOD = "GetByAccount";
 	
+	@SuppressWarnings("unused")
 	private Context context;
 	private WebServiceInvoker invoker;
 	

@@ -2,6 +2,7 @@
 <lint>
     <issue id="DrawAllocation">
         <ignore path="src/com/p2c/solutions/luvgirl/LuvHorizontalListView.java" />
+        <ignore path="src/com/p2c/solutions/luvphoto/LuvHorizontalListView.java" />
     </issue>
     <issue id="DuplicateIncludedIds" severity="error" />
     <issue id="InlinedApi">

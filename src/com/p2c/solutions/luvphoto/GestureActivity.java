@@ -127,7 +127,7 @@ public class GestureActivity extends BaseActivity implements SensorEventListener
 	    
 		//OPTION FOR IMAGE LOADER
 		options = new DisplayImageOptions.Builder()
-			.showImageForEmptyUri(R.drawable.ic_empty)
+			.showImageForEmptyUri(R.drawable.ic_error)
 			.showImageOnFail(R.drawable.ic_error)
 			.resetViewBeforeLoading(true)
 			.cacheOnDisc(true)
@@ -988,6 +988,7 @@ public class GestureActivity extends BaseActivity implements SensorEventListener
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	private class TouchImageViewListener implements OnTouchListener {
     	
     	@Override

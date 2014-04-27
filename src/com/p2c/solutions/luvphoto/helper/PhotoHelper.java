@@ -14,6 +14,7 @@ public class PhotoHelper {
 	
 	private static final String GET_PHOTO_BY_ALBUM_METHOD = "GetByAlbum";	
 	
+	@SuppressWarnings("unused")
 	private Context context;
 	private WebServiceInvoker invoker;
 	

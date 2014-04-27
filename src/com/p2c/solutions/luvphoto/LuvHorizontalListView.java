@@ -15,7 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.Scroller;
 
-public class LuvHorizontalListView  extends AdapterView<ListAdapter> {
+public class LuvHorizontalListView extends AdapterView<ListAdapter>{
 
     public boolean mAlwaysOverrideTouch = true;
     protected ListAdapter mAdapter;
@@ -33,9 +33,10 @@ public class LuvHorizontalListView  extends AdapterView<ListAdapter> {
     private OnItemLongClickListener mOnItemLongClicked;
     private boolean mDataChanged = false;
     
-
+    Context context;
     public LuvHorizontalListView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.context = context;
         initView();
     }
     
@@ -301,16 +302,15 @@ public class LuvHorizontalListView  extends AdapterView<ListAdapter> {
         }
 
         @Override
-        public boolean onScroll(MotionEvent e1, MotionEvent e2,
-                float distanceX, float distanceY) {
+        public boolean onScroll(MotionEvent e1, MotionEvent e2,float distanceX, float distanceY) {
             
             synchronized(LuvHorizontalListView.this){
                 mNextX += (int)distanceX;
             }
-            requestLayout();
-            
+            requestLayout();            
             return true;
         }
+
 
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
@@ -324,8 +324,7 @@ public class LuvHorizontalListView  extends AdapterView<ListAdapter> {
                         mOnItemSelected.onItemSelected(LuvHorizontalListView.this, child, mLeftViewIndex + 1 + i, mAdapter.getItemId( mLeftViewIndex + 1 + i ));
                     }
                     break;
-                }
-                
+                }                
             }
             return true;
         }
@@ -341,7 +340,6 @@ public class LuvHorizontalListView  extends AdapterView<ListAdapter> {
                     }
                     break;
                 }
-
             }
         }
 

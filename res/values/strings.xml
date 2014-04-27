@@ -40,7 +40,7 @@
     <string name="lb_add_to_favorite">Add to favorite photo</string>
     <string name="lb_download_to_gallery">Download to gallery</string>
     <string name="lb_set_wallpaper">Set wallpaper</string>
-    <string name="lb_loading">Loading ...</string>
+    <string name="lb_loading">Loading &#8230;</string>
     <string name="lb_first_name">First name</string>
     <string name="lb_last_name">Last name</string>
     <string name="lb_date">Date</string>
@@ -51,6 +51,8 @@
     <string name="lb_download">Download</string>
     <string name="lb_homescreen">Home screen</string>
     <string name="lb_favorite">Favorite</string>
+    <string name="lb_you_are_current_offline">You are currently offline</string>
+    <string name="lb_you_are_current_offline_description">We can\'t show you photos because you aren\'t connected to the internet. When you\'re back online hit the button bellow</string>
     
     <string name="validate_email_empty">The email is required.</string>
     <string name="validate_email_invalid_format">The email invalid format.</string>
@@ -76,6 +78,7 @@
     <string name="msg_add_favorite_success">Photo have been add to your favorite photo.</string>
     <string name="msg_add_favorite_unsuccess">Photo cannot add photo to your favorice photo.</string>   
     <string name="msg_list_items_null">Not found any item.</string>
+    <string name="msg_list_album_null">Sorry. Photo album not found</string>
     <string name="msg_error">Error.</string> 
     <string name="msg_favorite_photo_empty">You not have any favorite photo.</string>   
 </resources>

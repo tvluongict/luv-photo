@@ -28,7 +28,7 @@
                 android:id="@+id/img_album" 
 	            android:layout_width="32dp"
 	            android:layout_height="32dp"
-	            android:src="@drawable/album"
+	            android:src="@drawable/default_album"
 	            android:contentDescription="@string/lb_no_description"/>
 	       	<com.p2c.solutions.luvphoto.LuvTextView
 	        	android:id="@+id/appbar_tittle"
