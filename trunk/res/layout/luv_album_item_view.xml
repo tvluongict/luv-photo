@@ -5,6 +5,7 @@
     <ImageView 
         android:id="@+id/album_img"
 	    style="@style/AlbumItemImageStyle"
+	    android:src="@drawable/default_album"
 	    android:contentDescription="@string/lb_no_description"/>
 	    
     <com.p2c.solutions.luvphoto.LuvTextView

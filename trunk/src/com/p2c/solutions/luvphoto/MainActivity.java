@@ -7,10 +7,15 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.google.ads.AdRequest;
+import com.google.ads.AdView;
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.Click;
@@ -23,6 +28,7 @@ import com.p2c.solutions.luvphoto.core.webservices.JsonMessage;
 import com.p2c.solutions.luvphoto.core.webservices.WebServiceInvoker.JsonResult;
 import com.p2c.solutions.luvphoto.helper.AccountHelper;
 import com.p2c.solutions.luvphoto.helper.AlbumHelper;
+import com.p2c.solutions.luvphoto.services.LuvPhotoNotificationService;
 
 @EActivity(R.layout.activity_main)
 public class MainActivity extends BaseActivity {
@@ -35,12 +41,19 @@ public class MainActivity extends BaseActivity {
 	@ViewById(R.id.btn_login)
 	LuvTextView btnLogin;
 	
+	@ViewById(R.id.panel_refresh)
+	LinearLayout panelRefresh;
+	
 	@ViewById(R.id.btn_refresh)
-	ImageView btnRefresh;
+	LuvTextView btnRefresh;
 	
 	private ItemAdapter adapter;
 	AlbumHelper albumHelper;
 		
+	@ViewById(R.id.adView)
+	AdView adView;
+		
+	
 	@AfterViews
 	void afterViews() {			
 		
@@ -51,13 +64,14 @@ public class MainActivity extends BaseActivity {
 		
 		adapter.setNotifyOnChange(false);
 		lvAlbum.setAdapter(adapter);	
-		loadDataProcess();	
+		loadDataProcess();
 		
 		lvAlbum.setOnItemClickListener(new OnItemClickListener() {
-
 			@Override
 			public void onItemClick(AdapterView<?> adapter, View view, int position,long id) {
-								
+				
+				setItemStatus(false);
+				
 				AlbumItem item = (AlbumItem) adapter.getItemAtPosition(position);
 				Album album = item.getModel();
 				
@@ -69,13 +83,19 @@ public class MainActivity extends BaseActivity {
 			}
 
 		});
+		
+		Intent intent = new Intent(this, LuvPhotoNotificationService.class);
+        startService(intent);
+        
+        adView.loadAd(new AdRequest());
 	}
+	
 		
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 	    return super.onCreateOptionsMenu(menu);
 	}
-	
+		
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    // Handle presses on the action bar items
@@ -100,7 +120,7 @@ public class MainActivity extends BaseActivity {
 			if(albums != null && albums.size()>0)
 				displayOnViews(albums);
 			else
-				showToast(R.string.msg_list_items_null);
+				loadDataProcessFail(R.string.msg_list_album_null);
 			
 		} else if (result.getMessage() == JsonMessage.CONNECT_FAILED) {
 			loadDataProcessFail(R.string.app_global_global_networkConnectionFailed);
@@ -114,13 +134,17 @@ public class MainActivity extends BaseActivity {
 	@UiThread
 	public void loadDataProcessFail(int id){
 		showToast(id);
-		btnRefresh.setVisibility(View.VISIBLE);
+		
+		Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.slide_in_from_bottom);
+		panelRefresh.setVisibility(View.VISIBLE);	
+		panelRefresh.startAnimation(animation);
+		
 		btnLogin.setVisibility(View.GONE);
 	}
 	
 	@UiThread
 	void displayOnViews(ArrayList<Album> data) {
-		
+		btnLogin.setVisibility(View.VISIBLE);
 		adapter.setNotifyOnChange(false);
 		adapter.clear();
 		
@@ -143,6 +167,13 @@ public class MainActivity extends BaseActivity {
 		{
 			btnLogin.setText(getString(R.string.lb_login));
 		}
+		
+		if(panelRefresh.getVisibility() == View.VISIBLE)
+		{
+			Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.slide_out_to_bottom);			
+			panelRefresh.setVisibility(View.GONE);
+			panelRefresh.startAnimation(animation);
+		}
 	}
 		
 	
@@ -159,6 +190,16 @@ public class MainActivity extends BaseActivity {
 		{
 			btnLogin.setText(getString(R.string.lb_login));
 		}
+		
+		setItemStatus(true);
+	}
+	
+	@Override
+	protected void onDestroy() {
+		if (adView != null) {
+	      adView.destroy();
+	    }
+		super.onDestroy();
 	}
 	
 	@UiThread
@@ -168,11 +209,7 @@ public class MainActivity extends BaseActivity {
 	@Click(R.id.btn_login)
 	public void loginClicked(){
 		
-		//Intent i = new Intent(MainActivity.this, GestureActivity_.class);
-		//startActivity(i);
-		
-		//Intent i = new Intent(MainActivity.this, FlipoutActivity_.class);
-		//startActivity(i);
+		setItemStatus(false);
 		
 		if(loginAccount!=null)
 		{
@@ -187,13 +224,15 @@ public class MainActivity extends BaseActivity {
 	}
 	
 	@Click(R.id.btn_refresh)
-	public void refreshClicked(){
-		
-		loadDataProcess();
-		btnRefresh.setVisibility(View.GONE);
-		btnLogin.setVisibility(View.VISIBLE);
-		
+	public void refreshClicked(){		
+		loadDataProcess();		
 	}
+	
+	private void setItemStatus(Boolean status){
+		btnLogin.setEnabled(status);
+		lvAlbum.setEnabled(status);
+	}
+	
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {

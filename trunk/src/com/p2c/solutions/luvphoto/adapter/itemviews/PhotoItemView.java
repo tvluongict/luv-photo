@@ -26,13 +26,13 @@ public class PhotoItemView extends RelativeLayout implements ItemView {
 
 	@Override
 	public void prepareItemView() {
-		imgPath = (ImageView) findViewById(R.id.sc_merchant_logo);
+		imgPath = (ImageView) findViewById(R.id.photo_item);
 	}
 
 	@Override
 	public void setObject(Item item) {
 		Photo model = ((PhotoItem) item).getModel();
-		ImageLoader.getInstance().displayImage(model.getPath(), imgPath);
+		ImageLoader.getInstance().displayImage(model.getThumb(), imgPath);
 	}
 	
 }

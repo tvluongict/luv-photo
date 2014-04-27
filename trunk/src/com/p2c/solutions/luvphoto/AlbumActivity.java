@@ -9,8 +9,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import android.app.Dialog;
 import android.app.WallpaperManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -99,6 +101,7 @@ public class AlbumActivity extends BaseActivity implements OnRefreshListener<Gri
 	private ItemAdapter adapter;
 	PhotoHelper photoHelper;
 	FavoritePhotoHelper favoritePhotoHelper;
+	AccountHelper accountHelper;
 	private FavoritePhoto favoritePhoto;
 	private static Album album;
 	
@@ -117,21 +120,21 @@ public class AlbumActivity extends BaseActivity implements OnRefreshListener<Gri
 	//Sensor
 	private SensorManager sensorManager;
 	private long lastUpdate;
-	
-	
+		
 	@AfterViews
 	void afterViews() {
 		
 		photoHelper = new PhotoHelper(getApplicationContext());	
-		loginAccount = new AccountHelper(getApplicationContext()).getLoginAccount();
+		accountHelper = new AccountHelper(getApplicationContext());		
 		favoritePhotoHelper = new FavoritePhotoHelper(getApplicationContext());
-					
+			
+		loginAccount = accountHelper.getLoginAccount();
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 	    lastUpdate = System.currentTimeMillis();
 	    
 		//OPTION FOR IMAGE LOADER
   		options = new DisplayImageOptions.Builder()
-  			.showImageForEmptyUri(R.drawable.ic_empty)
+  			.showImageForEmptyUri(R.drawable.ic_error)
   			.showImageOnFail(R.drawable.ic_error)
   			.resetViewBeforeLoading(true)
   			.cacheOnDisc(true)
@@ -151,9 +154,14 @@ public class AlbumActivity extends BaseActivity implements OnRefreshListener<Gri
 		album = new Album();
 		album.setId(i.getIntExtra("AlbumId", 0));
 		album.setName(i.getStringExtra("AlbumName"));		
-		album.setImage("Image");
-					
+		album.setImage(i.getStringExtra("Image"));
+		
+		appbarTitle.setText(album.getName());
+		showAlbumImage(album.getImage());
+		
 		loadDataProcess();		
+		
+		pager.setPageTransformer(true, new DepthPageTransformer());
 	}
 	
 	@UiThread
@@ -205,7 +213,6 @@ public class AlbumActivity extends BaseActivity implements OnRefreshListener<Gri
 		adapter.notifyDataSetChanged();
 		
 		appbarTitle.setText(album.getName() + ": " + data.size() + " photos");
-		showAlbumImage(album.getImage());
 		
 		///Pager
 		String[] IMAGES = new String[photos.size()];
@@ -236,6 +243,8 @@ public class AlbumActivity extends BaseActivity implements OnRefreshListener<Gri
     protected void onResume() {
         super.onResume();
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),SensorManager.SENSOR_DELAY_NORMAL);
+        
+        loginAccount = accountHelper.getLoginAccount();	
         
         setImage(btnFacebook, R.drawable.facebook);
         setImage(btnDownload, R.drawable.download);
@@ -461,7 +470,8 @@ public class AlbumActivity extends BaseActivity implements OnRefreshListener<Gri
 	        .build();
 	    feedDialog.show();
 	}
-		public void showShareFacebookDialog()
+		
+	public void showShareFacebookDialog()
 		{
 			// custom dialog
 			final Dialog dialog = new Dialog(this,R.style.FullHeightDialog);
@@ -496,335 +506,346 @@ public class AlbumActivity extends BaseActivity implements OnRefreshListener<Gri
 			
 			dialog.show();
 		}	
-		public void authorizeFacenook(){
-			//Session.openActiveSession(this, true, callback);
-		}
-		public void uploadPhotoToFacebook(Session session, final Bitmap photoToPost, final String message) {    
-			if(photoToPost!=null)
-		    {
-				List<String> PERMISSIONS = Arrays.asList("publish_actions");
-		        session.requestNewPublishPermissions(new Session.NewPermissionsRequest(AlbumActivity.this, PERMISSIONS));
-		        
-		    	Request request = Request.newUploadPhotoRequest(session, photoToPost, new Request.Callback() {
-				
-		    		@Override
-		    		public void onCompleted(Response response) {
-						Toast.makeText(getApplicationContext(), "Photo have been shared to facebook.", Toast.LENGTH_LONG).show();
-					}
-		    	});	    
-		    		    	
-		    	Bundle params = request.getParameters();
-				params.putString("message", message);
-		    	
-				request.setParameters(params);
-		    	request.executeAsync();
-		    }		
-		} 
-		public class SessionStatusCallback implements Session.StatusCallback {
-		    @Override
-		    public void call(Session session, SessionState state, Exception exception) {        	
-		        showToast(R.string.app_global_global_data_error);
-		    }
-		}
-		//SHOW DIALOG WHEN USER CLICK "ADD PHOTO FAVORITE"
-		
-		@Click(R.id.btn_favorite)
-		public void favoriteClicked()
-		{		
-			setImage(btnFavorite, R.drawable.loadingwhite);
-			currentPhoto = photos.get(pagerPosition);
-			if(currentPhoto!=null)
+	public void authorizeFacenook(){
+		//Session.openActiveSession(this, true, callback);
+	}
+	public void uploadPhotoToFacebook(Session session, final Bitmap photoToPost, final String message) {    
+		if(photoToPost!=null)
+	    {
+			List<String> PERMISSIONS = Arrays.asList("publish_actions");
+	        session.requestNewPublishPermissions(new Session.NewPermissionsRequest(AlbumActivity.this, PERMISSIONS));
+	        
+	    	Request request = Request.newUploadPhotoRequest(session, photoToPost, new Request.Callback() {
+			
+	    		@Override
+	    		public void onCompleted(Response response) {
+					Toast.makeText(getApplicationContext(), "Photo have been shared to facebook.", Toast.LENGTH_LONG).show();
+				}
+	    	});	    
+	    		    	
+	    	Bundle params = request.getParameters();
+			params.putString("message", message);
+	    	
+			request.setParameters(params);
+	    	request.executeAsync();
+	    }		
+	} 
+	public class SessionStatusCallback implements Session.StatusCallback {
+	    @Override
+	    public void call(Session session, SessionState state, Exception exception) {        	
+	        showToast(R.string.app_global_global_data_error);
+	    }
+	}
+	//SHOW DIALOG WHEN USER CLICK "ADD PHOTO FAVORITE"
+	
+	@Click(R.id.btn_favorite)
+	public void favoriteClicked()
+	{		
+		setImage(btnFavorite, R.drawable.loadingwhite);
+		currentPhoto = photos.get(pagerPosition);
+		if(currentPhoto!=null)
+		{
+			if(loginAccount != null)
 			{
-				if(loginAccount != null)
-				{
-					btnFavorite.setImageResource(R.drawable.loadingwhite);
-					
-					//IF THIS PHOTO WAS IN FAVORITEPHOTO
-					//SHOW REMOVE PHOTO FROM FAVORITE CONFIRM DIALOG
-					if(favoritePhoto != null)
-						removeFavoritePhotoProcess();
-					else
-						newFavoritePhotoProcess(currentPhoto.getId(), loginAccount.getId());			
-				}
+				btnFavorite.setImageResource(R.drawable.loadingwhite);
+				
+				//IF THIS PHOTO WAS IN FAVORITEPHOTO
+				//SHOW REMOVE PHOTO FROM FAVORITE CONFIRM DIALOG
+				if(favoritePhoto != null)
+					removeFavoritePhotoProcess();
 				else
-				{
-					//IF NOT LOGIN : SHOW CONFIRM LOGIN DIALOGIG		
-					showLoginConfirmLoginDialog();
+					newFavoritePhotoProcess(currentPhoto.getId(), loginAccount.getId());			
+			}
+			else
+			{
+				//IF NOT LOGIN : SHOW CONFIRM LOGIN DIALOGIG		
+				showLoginConfirmLoginDialog();
+			}
+		}
+	}
+	public void showLoginConfirmLoginDialog()
+	{
+		// custom dialog
+		final Dialog dialog = new Dialog(this,R.style.FullHeightDialog);
+		dialog.setContentView(R.layout.luv_confirm_dialog);
+ 
+		// set the custom dialog components - text, image and button
+		LuvTextView tvTitle = (LuvTextView) dialog.findViewById(R.id.tvTitle);
+		LuvTextView tvContent = (LuvTextView) dialog.findViewById(R.id.tvContent);	
+		tvTitle.setText("Notice");
+		tvContent.setText("You not login. Do you want login to do this?");	
+		
+		Button dialogButtonOk = (Button) dialog.findViewById(R.id.dialogButtonOK);
+		dialogButtonOk.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {					
+					dialog.dismiss();					
+					Intent i = new Intent(AlbumActivity.this, LoginActivity_.class);
+					startActivityForResult(i, FAVORITE_CODE);
 				}
-			}
-		}
-		public void showLoginConfirmLoginDialog()
-		{
-			// custom dialog
-			final Dialog dialog = new Dialog(this,R.style.FullHeightDialog);
-			dialog.setContentView(R.layout.luv_confirm_dialog);
-	 
-			// set the custom dialog components - text, image and button
-			LuvTextView tvTitle = (LuvTextView) dialog.findViewById(R.id.tvTitle);
-			LuvTextView tvContent = (LuvTextView) dialog.findViewById(R.id.tvContent);	
-			tvTitle.setText("Notice");
-			tvContent.setText("You not login. Do you want login to do this?");	
-			
-			Button dialogButtonOk = (Button) dialog.findViewById(R.id.dialogButtonOK);
-			dialogButtonOk.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {					
-						dialog.dismiss();					
-						Intent i = new Intent(AlbumActivity.this, LoginActivity_.class);
-						startActivityForResult(i, FAVORITE_CODE);
-					}
-				});
-			
-			Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
-			dialogButtonCancel.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						dialog.dismiss();
-						setImage(btnFavorite, R.drawable.heart);
-					}
-				});
-			
-			dialog.show();
-		}
-		//SHOW DIALOG WHEN USER CLICK "ADD PHOTO FAVORITE"
-		public void showRemoveFavoriteConfirmDialog()
-		{
-			// custom dialog
-			final Dialog dialog = new Dialog(this,R.style.FullHeightDialog);
-			dialog.setContentView(R.layout.luv_confirm_dialog);
-	 
-			// set the custom dialog components - text, image and button
-			LuvTextView tvTitle = (LuvTextView) dialog.findViewById(R.id.tvTitle);
-			LuvTextView tvContent = (LuvTextView) dialog.findViewById(R.id.tvContent);
-			
-			tvTitle.setText("Notice");
-			tvContent.setText("Do you want remove photo from your favorite photos?");
-					
-			Button dialogButtonOk = (Button) dialog.findViewById(R.id.dialogButtonOK);
-			dialogButtonOk.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {					
-						dialog.dismiss();
-						removeFavoritePhotoProcess();					
-					}
-				});
-			
-			Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
-			dialogButtonCancel.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						dialog.dismiss();
-					}
-				});
-			
-			dialog.show();
-		}		
+			});
+		
+		Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
+		dialogButtonCancel.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					dialog.dismiss();
+					setImage(btnFavorite, R.drawable.heart);
+				}
+			});
+		
+		dialog.show();
+	}
+	//SHOW DIALOG WHEN USER CLICK "ADD PHOTO FAVORITE"
+	public void showRemoveFavoriteConfirmDialog()
+	{
+		// custom dialog
+		final Dialog dialog = new Dialog(this,R.style.FullHeightDialog);
+		dialog.setContentView(R.layout.luv_confirm_dialog);
+ 
+		// set the custom dialog components - text, image and button
+		LuvTextView tvTitle = (LuvTextView) dialog.findViewById(R.id.tvTitle);
+		LuvTextView tvContent = (LuvTextView) dialog.findViewById(R.id.tvContent);
+		
+		tvTitle.setText("Notice");
+		tvContent.setText("Do you want remove photo from your favorite photos?");
+				
+		Button dialogButtonOk = (Button) dialog.findViewById(R.id.dialogButtonOK);
+		dialogButtonOk.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {					
+					dialog.dismiss();
+					removeFavoritePhotoProcess();					
+				}
+			});
+		
+		Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
+		dialogButtonCancel.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					dialog.dismiss();
+				}
+			});
+		
+		dialog.show();
+	}		
 
-		//SHOW DIALOG WHEN USER CLICK DOWNLOAD PHOTO
-		@Click(R.id.btn_download)
-		public void downloadClicked()
-		{	
-			setImage(btnDownload, R.drawable.loadingwhite);
-			currentPhoto = photos.get(pagerPosition);
-			if(currentPhoto!=null)
-			{			
-				showDownloadConfirmDialog();
-			}
+	//SHOW DIALOG WHEN USER CLICK DOWNLOAD PHOTO
+	@Click(R.id.btn_download)
+	public void downloadClicked()
+	{	
+		setImage(btnDownload, R.drawable.loadingwhite);
+		currentPhoto = photos.get(pagerPosition);
+		if(currentPhoto!=null)
+		{			
+			showDownloadConfirmDialog();
 		}
-		public void showDownloadConfirmDialog()
-		{
-			// custom dialog
-			final Dialog dialog = new Dialog(this,R.style.FullHeightDialog);
-			dialog.setContentView(R.layout.luv_confirm_dialog);
-	 
-			// set the custom dialog components - text, image and button
-			LuvTextView tvTitle = (LuvTextView) dialog.findViewById(R.id.tvTitle);
-			LuvTextView tvContent = (LuvTextView) dialog.findViewById(R.id.tvContent);		
-			tvTitle.setText("Download Photo");
-			tvContent.setText("Do you want download this photo?");	
-			
-			Button dialogButtonOk = (Button) dialog.findViewById(R.id.dialogButtonOK);
-			dialogButtonOk.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {					
-						dialog.dismiss();
-						if(currentPhotoBimap!=null)
-						{
-							MediaStore.Images.Media.insertImage(getContentResolver(), currentPhotoBimap, currentPhoto.getName() , getString(R.string.app_name));
-							Toast.makeText(getApplicationContext(), getString(R.string.msg_download_photo_success), Toast.LENGTH_LONG).show();
-							btnDownload.setImageResource(R.drawable.download);
-							setImage(btnDownload, R.drawable.download);
-						}
-						else
-						{
-							DownloadExecute(photos.get(pagerPosition).getPath());
-						}
-					}
-				});		
-			Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
-			dialogButtonCancel.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						dialog.dismiss();
+	}
+	public void showDownloadConfirmDialog()
+	{
+		// custom dialog
+		final Dialog dialog = new Dialog(this,R.style.FullHeightDialog);
+		dialog.setContentView(R.layout.luv_confirm_dialog);
+ 
+		// set the custom dialog components - text, image and button
+		LuvTextView tvTitle = (LuvTextView) dialog.findViewById(R.id.tvTitle);
+		LuvTextView tvContent = (LuvTextView) dialog.findViewById(R.id.tvContent);		
+		tvTitle.setText("Download Photo");
+		tvContent.setText("Do you want download this photo?");	
+		
+		Button dialogButtonOk = (Button) dialog.findViewById(R.id.dialogButtonOK);
+		dialogButtonOk.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {					
+					dialog.dismiss();
+					if(currentPhotoBimap!=null)
+					{
+						MediaStore.Images.Media.insertImage(getContentResolver(), currentPhotoBimap, currentPhoto.getName() , getString(R.string.app_name));
+						Toast.makeText(getApplicationContext(), getString(R.string.msg_download_photo_success), Toast.LENGTH_LONG).show();
+						btnDownload.setImageResource(R.drawable.download);
 						setImage(btnDownload, R.drawable.download);
 					}
-				});
-			
-			dialog.show();
-		}
-		@Background
-		public void DownloadExecute(String src)
-		{
-			try {	    	
-		        URL url = new URL(src);
-		        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-		        connection.setDoInput(true);
-		        connection.connect();
-		        InputStream input = connection.getInputStream();
-		        currentPhotoBimap = BitmapFactory.decodeStream(input);
-		        DownloadFinish();
-		    } catch (IOException e) {
-		    	DownloadError();
-		    }
-		}
-		@UiThread
-		public void DownloadFinish()
-		{
-			MediaStore.Images.Media.insertImage(getContentResolver(), currentPhotoBimap, currentPhoto.getName() , getString(R.string.app_name));
-			Toast.makeText(getApplicationContext(), getString(R.string.msg_download_photo_success), Toast.LENGTH_LONG).show();
-			setImage(btnDownload, R.drawable.download);
-		}
-		@UiThread
-		public void DownloadError()
-		{
-			Toast.makeText(getApplicationContext(), getString(R.string.msg_download_photo_unsuccess), Toast.LENGTH_LONG).show();
-			setImage(btnDownload, R.drawable.download);
-		}
-		
-		//SHOW DIALOG WHEN USER CLICK DOWNLOAD PHOTO
-		@Click(R.id.btn_wallpaper)
-		public void wallpaperClicked()
-		{		
-			setImage(btnWallpaper, R.drawable.loadingwhite);
-			currentPhoto = photos.get(pagerPosition);
-			if(currentPhoto != null)
-			{
-				btnWallpaper.setImageResource(R.drawable.loadingwhite);
-				showSetWallPaperConfirmDialog();			
-			}
-		}
-		public void showSetWallPaperConfirmDialog()
-		{
-			// custom dialog
-			final Dialog dialog = new Dialog(this,R.style.FullHeightDialog);
-			dialog.setContentView(R.layout.luv_confirm_dialog);
-	 
-			// set the custom dialog components - text, image and button
-			LuvTextView tvTitle = (LuvTextView) dialog.findViewById(R.id.tvTitle);
-			LuvTextView tvContent = (LuvTextView) dialog.findViewById(R.id.tvContent);		
-			tvTitle.setText("Set Photo Wallpaper");
-			tvContent.setText("Do you want set photo to home screen?");	
-			
-			Button dialogButtonOk = (Button) dialog.findViewById(R.id.dialogButtonOK);
-			dialogButtonOk.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						
-						dialog.dismiss();
-						if(currentPhotoBimap!=null)
-						{
-							try{
-								WallpaperManager wallpaperManager = WallpaperManager.getInstance(AlbumActivity.this);
-								wallpaperManager.setBitmap(currentPhotoBimap);
-								Toast.makeText(getApplicationContext(), getString(R.string.msg_set_wallpaper_unsuccess), Toast.LENGTH_LONG).show();							
-							}catch(Exception ex){
-								Toast.makeText(getApplicationContext(), getString(R.string.msg_set_wallpaper_unsuccess) + ex.getMessage(), Toast.LENGTH_LONG).show();						
-							}
-							
-							setImage(btnWallpaper, R.drawable.wallpaper);
-						}
-						else
-						{
-							setWallpaperExecute(currentPhoto.getPath());
-						}
+					else
+					{
+						DownloadExecute(photos.get(pagerPosition).getPath());
 					}
-				});
-			
-			Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
-			dialogButtonCancel.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						dialog.dismiss();
+				}
+			});		
+		Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
+		dialogButtonCancel.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					dialog.dismiss();
+					setImage(btnDownload, R.drawable.download);
+				}
+			});
+		
+		dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {         
+		    @Override
+		    public void onCancel(DialogInterface dialog) {
+		    	setImage(btnDownload, R.drawable.download);
+		    }
+		});
+		
+		dialog.show();
+	}
+	@Background
+	public void DownloadExecute(String src)
+	{
+		try {	    	
+	        URL url = new URL(src);
+	        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+	        connection.setDoInput(true);
+	        connection.connect();
+	        InputStream input = connection.getInputStream();
+	        currentPhotoBimap = BitmapFactory.decodeStream(input);
+	        DownloadFinish();
+	    } catch (IOException e) {
+	    	DownloadError();
+	    }
+	}
+	@UiThread
+	public void DownloadFinish()
+	{
+		MediaStore.Images.Media.insertImage(getContentResolver(), currentPhotoBimap, currentPhoto.getName() , getString(R.string.app_name));
+		Toast.makeText(getApplicationContext(), getString(R.string.msg_download_photo_success), Toast.LENGTH_LONG).show();
+		setImage(btnDownload, R.drawable.download);
+	}
+	@UiThread
+	public void DownloadError()
+	{
+		Toast.makeText(getApplicationContext(), getString(R.string.msg_download_photo_unsuccess), Toast.LENGTH_LONG).show();
+		setImage(btnDownload, R.drawable.download);
+	}
+	
+	//SHOW DIALOG WHEN USER CLICK DOWNLOAD PHOTO
+	@Click(R.id.btn_wallpaper)
+	public void wallpaperClicked()
+	{		
+		setImage(btnWallpaper, R.drawable.loadingwhite);
+		currentPhoto = photos.get(pagerPosition);
+		if(currentPhoto != null)
+		{
+			btnWallpaper.setImageResource(R.drawable.loadingwhite);
+			showSetWallPaperConfirmDialog();			
+		}
+	}
+	public void showSetWallPaperConfirmDialog()
+	{
+		// custom dialog
+		final Dialog dialog = new Dialog(this,R.style.FullHeightDialog);
+		dialog.setContentView(R.layout.luv_confirm_dialog);
+ 
+		// set the custom dialog components - text, image and button
+		LuvTextView tvTitle = (LuvTextView) dialog.findViewById(R.id.tvTitle);
+		LuvTextView tvContent = (LuvTextView) dialog.findViewById(R.id.tvContent);		
+		tvTitle.setText("Set Photo Wallpaper");
+		tvContent.setText("Do you want set photo to home screen?");	
+		
+		Button dialogButtonOk = (Button) dialog.findViewById(R.id.dialogButtonOK);
+		dialogButtonOk.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {						
+					dialog.dismiss();
+					if(currentPhotoBimap!=null)
+					{
+						try{
+							WallpaperManager wallpaperManager = WallpaperManager.getInstance(AlbumActivity.this);
+							wallpaperManager.setBitmap(currentPhotoBimap);
+							Toast.makeText(getApplicationContext(), getString(R.string.msg_set_wallpaper_unsuccess), Toast.LENGTH_LONG).show();							
+						}catch(Exception ex){
+							Toast.makeText(getApplicationContext(), getString(R.string.msg_set_wallpaper_unsuccess) + ex.getMessage(), Toast.LENGTH_LONG).show();						
+						}
+						
 						setImage(btnWallpaper, R.drawable.wallpaper);
 					}
-				});
-			
-			dialog.show();
-		}
-		@Background
-		public void setWallpaperExecute(String src)
-		{
-			try {	    	
-		        URL url = new URL(src);
-		        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-		        connection.setDoInput(true);
-		        connection.connect();
-		        InputStream input = connection.getInputStream();
-		        currentPhotoBimap = BitmapFactory.decodeStream(input);
-		        setwallpaperFinish();
-		    } catch (IOException e) {
-		    	setWallpaperError();
+					else
+					{
+						setWallpaperExecute(currentPhoto.getPath());
+					}
+				}
+			});
+		
+		Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
+		dialogButtonCancel.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					dialog.dismiss();
+					setImage(btnWallpaper, R.drawable.wallpaper);
+				}
+			});
+		
+		dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {         
+		    @Override
+		    public void onCancel(DialogInterface dialog) {
+		    	setImage(btnWallpaper, R.drawable.wallpaper);
 		    }
-		}
-		@UiThread
-		public void setwallpaperFinish(){
-			try{
-				WallpaperManager wallpaperManager = WallpaperManager.getInstance(AlbumActivity.this);
-				wallpaperManager.setBitmap(currentPhotoBimap);
-				Toast.makeText(getApplicationContext(), getString(R.string.msg_set_wallpaper_success), Toast.LENGTH_LONG).show();
-			}catch(Exception ex){
-				Toast.makeText(getApplicationContext(), getString(R.string.msg_set_wallpaper_unsuccess) + ex.getMessage(), Toast.LENGTH_LONG).show();
-			}
-			
-			setImage(btnWallpaper, R.drawable.wallpaper);
-			
-		}
-		@UiThread
-		public void setWallpaperError(){
-			Toast.makeText(getApplicationContext(), getString(R.string.msg_set_wallpaper_unsuccess), Toast.LENGTH_LONG).show();
-			setImage(btnWallpaper, R.drawable.wallpaper);
+		});
+		
+		dialog.show();
+	}
+	@Background
+	public void setWallpaperExecute(String src)
+	{
+		try {	    	
+	        URL url = new URL(src);
+	        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+	        connection.setDoInput(true);
+	        connection.connect();
+	        InputStream input = connection.getInputStream();
+	        currentPhotoBimap = BitmapFactory.decodeStream(input);
+	        setwallpaperFinish();
+	    } catch (IOException e) {
+	    	setWallpaperError();
+	    }
+	}
+	@UiThread
+	public void setwallpaperFinish(){
+		try{
+			WallpaperManager wallpaperManager = WallpaperManager.getInstance(AlbumActivity.this);
+			wallpaperManager.setBitmap(currentPhotoBimap);
+			Toast.makeText(getApplicationContext(), getString(R.string.msg_set_wallpaper_success), Toast.LENGTH_LONG).show();
+		}catch(Exception ex){
+			Toast.makeText(getApplicationContext(), getString(R.string.msg_set_wallpaper_unsuccess) + ex.getMessage(), Toast.LENGTH_LONG).show();
 		}
 		
-		@UiThread
-		void setImage(ImageView img,int id)
+		setImage(btnWallpaper, R.drawable.wallpaper);
+		
+	}
+	@UiThread
+	public void setWallpaperError(){
+		Toast.makeText(getApplicationContext(), getString(R.string.msg_set_wallpaper_unsuccess), Toast.LENGTH_LONG).show();
+		setImage(btnWallpaper, R.drawable.wallpaper);
+	}
+	
+	@UiThread
+	void setImage(ImageView img,int id)
+	{
+		img.setImageResource(id);
+		if(id == R.drawable.loadingwhite || id == R.drawable.loading)
+			img.setEnabled(false);
+		else
+			img.setEnabled(true);
+	}
+				
+		@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {		
+		if(requestCode == FAVORITE_CODE)
 		{
-			img.setImageResource(id);
-			if(id == R.drawable.loadingwhite || id == R.drawable.loading)
-				img.setEnabled(false);
-			else
-				img.setEnabled(true);
+			loginAccount = accountHelper.getLoginAccount();			
+			checkFavoritePhotoProcess(photos.get(pagerPosition));
+			btnFavorite.setEnabled(true);			
 		}
-		
-		
-		@Override
-		protected void onActivityResult(int requestCode, int resultCode, Intent data) {		
-			if(requestCode == FAVORITE_CODE)
-			{
-				loginAccount = new AccountHelper(getApplicationContext()).getLoginAccount();			
-				checkFavoritePhotoProcess(photos.get(pagerPosition));
-				btnFavorite.setEnabled(true);			
-			}
-		}
-		
-		@Override
-	    protected void onSaveInstanceState(Bundle outState) {
+	}
+	
+	@Override
+    protected void onSaveInstanceState(Bundle outState) {
 	        super.onSaveInstanceState(outState);
 	        Session session = Session.getActiveSession();
 	        Session.saveSession(session, outState);
 	        outState.putInt(STATE_POSITION, pager.getCurrentItem());
 	    }
 			
-	
 	
 	////////////////////////////////////////////////////////////////////////////
 	
@@ -852,12 +873,18 @@ public class AlbumActivity extends BaseActivity implements OnRefreshListener<Gri
 	@Override
 	public void onBackPressed()
 	{
-	    if(navOption.getVisibility() == View.VISIBLE)
+		if(navOption.getVisibility() == View.VISIBLE)
+	    {	    	
 	    	navOption.setVisibility(View.GONE);
+	    }
 	    else if(pager.getVisibility() == View.VISIBLE)
-	    	pager.setVisibility(View.GONE);
+	    {	    	
+	    	pager.setVisibility(View.GONE);	    
+	    }
 	    else
+	    {
 	    	super.onBackPressed();
+	    }
 	}
 
 	@Override
@@ -876,10 +903,7 @@ public class AlbumActivity extends BaseActivity implements OnRefreshListener<Gri
 	    return super.onKeyUp(keyCode, event);
 	}
 	
-
-	
 	///////////////////////////////////////////////////////////////////////////////////
-	
 	
 
 	@Override
@@ -959,8 +983,8 @@ public class AlbumActivity extends BaseActivity implements OnRefreshListener<Gri
 			
 			imageView.setOnClickListener(new OnClickListener() {
 	            @Override
-	            public void onClick(View v) {	            	
-	            	         	
+	            public void onClick(View v) {
+	            	
 	            	if(navOption.getVisibility() == View.GONE)
 	            	{	     
 	            		Animation animation = AnimationUtils.loadAnimation(AlbumActivity.this, R.anim.bottom_in);
@@ -971,8 +995,9 @@ public class AlbumActivity extends BaseActivity implements OnRefreshListener<Gri
 	            	{
 	            		navOption.setVisibility(View.GONE);
 	            	}
-	            }
-	        });			
+	            }            
+	         
+	        });
 			
 			final ProgressBar spinner = (ProgressBar) imageLayout.findViewById(R.id.loading);
 			imageLoader.displayImage(images[position], imageView, options, new SimpleImageLoadingListener() {
@@ -984,26 +1009,27 @@ public class AlbumActivity extends BaseActivity implements OnRefreshListener<Gri
 
 				@Override
 				public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+					@SuppressWarnings("unused")
 					String message = null;
 					switch (failReason.getType()) {
 						case IO_ERROR:
-							message = "Input/Output error";
+							message = "Photo is not available.";
 							break;
 						case DECODING_ERROR:
-							message = "Image can't be decoded";
+							message = "Photo is not available.";
 							break;
 						case NETWORK_DENIED:
-							message = "Downloads are denied";
+							message = "Photo is not available.";
 							break;
 						case OUT_OF_MEMORY:
-							message = "Out Of Memory error";
+							message = "Photo is not available.";
 							break;
 						case UNKNOWN:
-							message = "Unknown error";
+							message = "Photo is not available.";
 							break;
 					}
 					
-					Toast.makeText(AlbumActivity.this, message, Toast.LENGTH_SHORT).show();
+					//Toast.makeText(AlbumActivity.this, message, Toast.LENGTH_SHORT).show();
 					spinner.setVisibility(View.GONE);
 				}
 
@@ -1049,5 +1075,42 @@ public class AlbumActivity extends BaseActivity implements OnRefreshListener<Gri
 			currentPhoto = null;
 			currentPhotoBimap = null;
 		}
-	}	
+	}
+	
+	public class DepthPageTransformer implements ViewPager.PageTransformer {
+	    private static final float MIN_SCALE = 0.75f;
+
+	    public void transformPage(View view, float position) {
+	        int pageWidth = view.getWidth();
+
+	        if (position < -1) { // [-Infinity,-1)
+	            // This page is way off-screen to the left.
+	            view.setAlpha(0);
+
+	        } else if (position <= 0) { // [-1,0]
+	            // Use the default slide transition when moving to the left page
+	            view.setAlpha(1);
+	            view.setTranslationX(0);
+	            view.setScaleX(1);
+	            view.setScaleY(1);
+
+	        } else if (position <= 1) { // (0,1]
+	            // Fade the page out.
+	            view.setAlpha(1 - position);
+
+	            // Counteract the default slide transition
+	            view.setTranslationX(pageWidth * -position);
+
+	            // Scale the page down (between MIN_SCALE and 1)
+	            float scaleFactor = MIN_SCALE
+	                    + (1 - MIN_SCALE) * (1 - Math.abs(position));
+	            view.setScaleX(scaleFactor);
+	            view.setScaleY(scaleFactor);
+
+	        } else { // (1,+Infinity]
+	            // This page is way off-screen to the right.
+	            view.setAlpha(0);
+	        }
+	    }
+	}
 }

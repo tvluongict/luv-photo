@@ -637,17 +637,18 @@ private static final String DEBUG = "DEBUG";
     	
     	@Override
         public boolean onTouch(View v, MotionEvent event) {
-    		
+    		    		
             mScaleDetector.onTouchEvent(event);
             mGestureDetector.onTouchEvent(event);
             PointF curr = new PointF(event.getX(), event.getY());
                
             //final int X = (int) event.getRawX();
             final int Y = (int) event.getRawY();
-                        
+                
+            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) getLayoutParams();
+            
             if (state == NONE || state == DRAG || state == FLING) {
-            	
-            	FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) getLayoutParams();
+            	            	
             	int currentMarginTop=0;
             	
 	            switch (event.getAction()) {
@@ -679,8 +680,7 @@ private static final String DEBUG = "DEBUG";
 		                	//layoutParams.leftMargin = X - _xDelta;
 		                	
 		                	//Hinh se khong scale ma se hide tu top
-		                	layoutParams.leftMargin = 0;
-		                	
+		                	layoutParams.leftMargin = 0;		                	
 			                layoutParams.rightMargin = 0;
 			                layoutParams.bottomMargin = 0;
 			                
@@ -699,12 +699,11 @@ private static final String DEBUG = "DEBUG";
 	
 	                case MotionEvent.ACTION_UP:
 	                case MotionEvent.ACTION_POINTER_UP:
-	                	fixScaleTrans();    		
-                		//Toast.makeText(context, "Need to fit image", Toast.LENGTH_SHORT).show();
-                		layoutParams.topMargin = 0;
-                		layoutParams.bottomMargin = 0;
+	                	fixScaleTrans();		
                 		setLayoutParams(layoutParams);	                	
-	                    setState(NONE);
+	                    setState(NONE);	                    
+	                    layoutParams.topMargin = 0;
+                		layoutParams.bottomMargin = 0;                		
 	                    break;
 	            }
             }
@@ -732,10 +731,10 @@ private static final String DEBUG = "DEBUG";
         	
         	Log.i("ImageTouch", "On scale two finger");
         	
-        	scaleImage(detector.getScaleFactor(), detector.getFocusX(), detector.getFocusY(), true);
+        	//scaleImage(detector.getScaleFactor(), detector.getFocusX(), detector.getFocusY(), true);
             return true;
         }
-        
+        	
         @Override
         public void onScaleEnd(ScaleGestureDetector detector) {
         	super.onScaleEnd(detector);

@@ -5,6 +5,7 @@ import android.content.Context;
 import com.p2c.solutions.luvphoto.R;
 import com.p2c.solutions.luvphoto.core.webservices.HttpMethod;
 import com.p2c.solutions.luvphoto.core.webservices.WebServiceInvoker;
+import com.p2c.solutions.luvphoto.core.webservices.WebServiceParam;
 import com.p2c.solutions.luvphoto.core.webservices.WebServiceInvoker.JsonResult;
 
 public class AlbumHelper {
@@ -12,6 +13,7 @@ public class AlbumHelper {
 	private static final String NAMESPACE = "Album";
 	
 	private static final String GET_ALL_ALBUMS_METHOD = "GetAll";
+	@SuppressWarnings("unused")
 	private Context context;
 	private WebServiceInvoker invoker;
 	
@@ -21,9 +23,13 @@ public class AlbumHelper {
 		invoker = new WebServiceInvoker(NAMESPACE, url);
 	}
 	
-	public JsonResult getAlbums() {		
+	public JsonResult getAlbums() {	
+		
+		WebServiceParam params = new WebServiceParam();
+		params.addProperty("ParentId", "1");
+		
 		invoker.setWebMethod(HttpMethod.GET);		
-		return invoker.invokeMethod(GET_ALL_ALBUMS_METHOD);				
+		return invoker.invokeMethod(GET_ALL_ALBUMS_METHOD,params);				
 	}
 	
 }

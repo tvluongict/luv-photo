@@ -120,7 +120,7 @@ public class FavoritePhotoActivity extends BaseActivity implements SensorEventLi
 	    
 		//OPTION FOR IMAGE LOADER
 		options = new DisplayImageOptions.Builder()
-			.showImageForEmptyUri(R.drawable.ic_empty)
+			.showImageForEmptyUri(R.drawable.ic_error)
 			.showImageOnFail(R.drawable.ic_error)
 			.resetViewBeforeLoading(true)
 			.cacheOnDisc(true)

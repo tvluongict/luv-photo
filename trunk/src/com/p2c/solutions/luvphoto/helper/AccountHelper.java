@@ -126,8 +126,7 @@ public class AccountHelper {
 		params.addProperty("Email", email);
 		
 		invoker.setWebMethod(HttpMethod.POST);
-		JsonResult result = invoker.invokeMethod(RECOVERY_METHOD,params);
-		
+		JsonResult result = invoker.invokeMethod(RECOVERY_METHOD,params);		
 		return result;	
 	}
 	
