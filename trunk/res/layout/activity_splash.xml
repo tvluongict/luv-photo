@@ -3,12 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#6e5f76">
+    android:background="#6e5f76"
+    android:gravity="center_vertical">
       
     <ImageView 
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:src="@drawable/splashscreen"
-        android:scaleType="fitXY"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/splashscreen"        
         android:contentDescription="@string/lb_no_description"/>
 </LinearLayout>

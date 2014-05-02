@@ -88,6 +88,23 @@
 	    android:visibility="gone"/> 
   	
   	<LinearLayout 
+        android:id="@+id/pn_admod"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:visibility="gone">
+        
+        <com.google.ads.AdView
+	        xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+	        android:id="@+id/adView"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        ads:adSize="BANNER"
+	        ads:adUnitId="a1535c92eb41812"
+	        ads:testDevices="TEST_EMULATOR,33E661802076E2B84D41346887EBBC95" />	        
+    </LinearLayout>    
+    
+  	<LinearLayout 
   	    android:id="@+id/navbar_option"
   	    android:layout_width="fill_parent"
   	    android:layout_height="wrap_content"

@@ -21,6 +21,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.view.PagerAdapter;
@@ -46,6 +48,8 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.widget.WebDialog;
 import com.facebook.widget.WebDialog.OnCompleteListener;
+import com.google.ads.AdRequest;
+import com.google.ads.AdView;
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.Click;
@@ -116,6 +120,10 @@ public class AlbumActivity extends BaseActivity implements OnRefreshListener<Gri
 	StringBuilder builder = new StringBuilder();
 	private Photo currentPhoto;
 	
+	@ViewById(R.id.pn_admod)
+	LinearLayout pnAdmod;
+	@ViewById(R.id.adView)
+	AdView adView;
 	////////////////////////////////////////////////////////////////
 	//Sensor
 	private SensorManager sensorManager;
@@ -144,6 +152,7 @@ public class AlbumActivity extends BaseActivity implements OnRefreshListener<Gri
   			.displayer(new FadeInBitmapDisplayer(300))			
   			.build();		
 		
+  		disnablePullToRefresh();
 		adapter = new ItemAdapter(this);
 		adapter.setNotifyOnChange(false);
 		lvPhotos.setAdapter(adapter);
@@ -168,6 +177,11 @@ public class AlbumActivity extends BaseActivity implements OnRefreshListener<Gri
 	void enablePullToRefresh(){
 		if(lvPhotos.getMode() == Mode.DISABLED)
 			lvPhotos.setMode(Mode.PULL_FROM_START);
+	}
+	
+	@UiThread
+	void disnablePullToRefresh(){
+		lvPhotos.setMode(Mode.DISABLED);
 	}
 	
 	@Override
@@ -211,6 +225,7 @@ public class AlbumActivity extends BaseActivity implements OnRefreshListener<Gri
 			adapter.add(empty);
 		}
 		adapter.notifyDataSetChanged();
+		enablePullToRefresh();
 		
 		appbarTitle.setText(album.getName() + ": " + data.size() + " photos");
 		
@@ -224,7 +239,7 @@ public class AlbumActivity extends BaseActivity implements OnRefreshListener<Gri
 		ImagePagerAdapter imagePagerAdapter = new ImagePagerAdapter(IMAGES);
 		pager.setAdapter(imagePagerAdapter);
 		pager.setCurrentItem(pagerPosition);	
-		pager.setOnPageChangeListener(imagePagerAdapter);
+		pager.setOnPageChangeListener(imagePagerAdapter);		
 		
 		checkFavoritePhotoProcess(photos.get(pagerPosition));
 	}	
@@ -947,7 +962,22 @@ public class AlbumActivity extends BaseActivity implements OnRefreshListener<Gri
         float tmp = Math.round(Rval);
         return (float)tmp/p;
     }
+	///////////////////////////////////////////////////////////////////////
 	
+	private void showAdmod(){
+		adView.loadAd(new AdRequest());
+		pnAdmod.setVisibility(View.VISIBLE);		
+		final Animation animation = AnimationUtils.loadAnimation(AlbumActivity.this, R.anim.top_out);
+		Handler h = new Handler(Looper.getMainLooper());
+		Runnable r = new Runnable() {
+            @Override
+            public void run() {
+            	pnAdmod.setVisibility(View.GONE);
+            	pnAdmod.startAnimation(animation);
+            }
+        };
+        h.postDelayed(r,2000); //-- run after 8 seconds      
+	}
 	
 	////////////////////////////////////////////////////////////////////////
 	
@@ -1035,7 +1065,8 @@ public class AlbumActivity extends BaseActivity implements OnRefreshListener<Gri
 
 				@Override
 				public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-					spinner.setVisibility(View.GONE);
+					spinner.setVisibility(View.GONE);				
+					
 				}
 			});
 			
@@ -1069,11 +1100,12 @@ public class AlbumActivity extends BaseActivity implements OnRefreshListener<Gri
 		
 		@Override
 		public void onPageSelected(int position) {
-			
 			pagerPosition  = position;
 			checkFavoritePhotoProcess(photos.get(pagerPosition));
 			currentPhoto = null;
 			currentPhotoBimap = null;
+			
+			showAdmod();
 		}
 	}
 	
