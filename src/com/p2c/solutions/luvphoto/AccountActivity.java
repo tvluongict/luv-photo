@@ -21,6 +21,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.view.PagerAdapter;
@@ -46,6 +48,8 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.widget.WebDialog;
 import com.facebook.widget.WebDialog.OnCompleteListener;
+import com.google.ads.AdRequest;
+import com.google.ads.AdView;
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.Click;
@@ -115,6 +119,10 @@ public class AccountActivity extends BaseActivity implements OnRefreshListener<G
 	
 	private Photo currentPhoto;
 	
+	@ViewById(R.id.pn_admod)
+	LinearLayout pnAdmod;
+	@ViewById(R.id.adView)
+	AdView adView;
 	////////////////////////////////////////////////////////////////	
 	//Sensor
 	private SensorManager sensorManager;
@@ -1039,13 +1047,29 @@ public class AccountActivity extends BaseActivity implements OnRefreshListener<G
 		}
 		
 		@Override
-		public void onPageSelected(int position) {
-			
+		public void onPageSelected(int position) {			
 			pagerPosition  = position;
 			checkFavoritePhotoProcess(photos.get(pagerPosition));
 			currentPhoto = null;
 			currentPhotoBimap = null;
+			
+			showAdmod();
 		}
+	}
+	
+	private void showAdmod(){
+		adView.loadAd(new AdRequest());
+		pnAdmod.setVisibility(View.VISIBLE);		
+		final Animation animation = AnimationUtils.loadAnimation(AccountActivity.this, R.anim.top_out);
+		Handler h = new Handler(Looper.getMainLooper());
+		Runnable r = new Runnable() {
+            @Override
+            public void run() {
+            	pnAdmod.setVisibility(View.GONE);
+            	pnAdmod.startAnimation(animation);
+            }
+        };
+        h.postDelayed(r,2000); //-- run after 8 seconds      
 	}
 	
 	public class DepthPageTransformer implements ViewPager.PageTransformer {

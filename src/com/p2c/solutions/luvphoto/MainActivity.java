@@ -3,7 +3,12 @@ package com.p2c.solutions.luvphoto;
 import greendroid.widget.ItemAdapter;
 import greendroid.widget.item.DescriptionItem;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,7 +54,10 @@ public class MainActivity extends BaseActivity {
 	
 	private ItemAdapter adapter;
 	AlbumHelper albumHelper;
-		
+	
+	@ViewById(R.id.pn_admod)
+	LinearLayout pnAdmod;
+	
 	@ViewById(R.id.adView)
 	AdView adView;
 		
@@ -86,8 +94,8 @@ public class MainActivity extends BaseActivity {
 		
 		Intent intent = new Intent(this, LuvPhotoNotificationService.class);
         startService(intent);
-        
-        adView.loadAd(new AdRequest());
+          
+        showAdmod();
 	}
 	
 		
@@ -192,6 +200,9 @@ public class MainActivity extends BaseActivity {
 		}
 		
 		setItemStatus(true);
+		
+		showAdmod();
+		
 	}
 	
 	@Override
@@ -249,5 +260,21 @@ public class MainActivity extends BaseActivity {
 				btnLogin.setText(getString(R.string.lb_login));
 			}
 		}
+	}
+	
+	private void showAdmod(){
+		//Show google admod in 5 seconds
+        adView.loadAd(new AdRequest());
+        pnAdmod.setVisibility(View.VISIBLE);
+		final Animation animation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.top_out);
+		Handler h = new Handler(Looper.getMainLooper());
+		Runnable r = new Runnable() {
+            @Override
+            public void run() {
+            	pnAdmod.setVisibility(View.GONE);
+            	pnAdmod.startAnimation(animation);
+            }
+        };
+        h.postDelayed(r,4000); //-- run after 8 seconds      
 	}
 }
