@@ -5,16 +5,12 @@ import static com.p2c.solutions.luvphoto.TouchImageViewDefault.State.DRAG;
 import static com.p2c.solutions.luvphoto.TouchImageViewDefault.State.FLING;
 import static com.p2c.solutions.luvphoto.TouchImageViewDefault.State.NONE;
 import static com.p2c.solutions.luvphoto.TouchImageViewDefault.State.ZOOM;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
-import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
@@ -563,7 +559,7 @@ public class TouchImageViewDefault extends ImageView {
         		fling.cancelFling();
         	}
         	fling = new Fling((int) velocityX, (int) velocityY);
-        	compatPostOnAnimation(fling);
+        	//compatPostOnAnimation(fling);
         	
         	
              
@@ -576,8 +572,9 @@ public class TouchImageViewDefault extends ImageView {
         	boolean consumed = false;
         	if (state == NONE) {
 	        	float targetZoom = (normalizedScale == minScale) ? maxScale : minScale;
-	        	DoubleTapZoom doubleTap = new DoubleTapZoom(targetZoom, e.getX(), e.getY(), false);
-	        	compatPostOnAnimation(doubleTap);
+	        	@SuppressWarnings("unused")
+				DoubleTapZoom doubleTap = new DoubleTapZoom(targetZoom, e.getX(), e.getY(), false);
+	        	//compatPostOnAnimation(doubleTap);
 	        	consumed = true;
         	}
         	return consumed;
@@ -676,8 +673,9 @@ public class TouchImageViewDefault extends ImageView {
         	}
         	
         	if (animateToZoomBoundary) {
-	        	DoubleTapZoom doubleTap = new DoubleTapZoom(targetZoom, viewWidth / 2, viewHeight / 2, true);
-	        	compatPostOnAnimation(doubleTap);
+	        	@SuppressWarnings("unused")
+				DoubleTapZoom doubleTap = new DoubleTapZoom(targetZoom, viewWidth / 2, viewHeight / 2, true);
+	        	//compatPostOnAnimation(doubleTap);
         	}
         }
     }
@@ -755,7 +753,7 @@ public class TouchImageViewDefault extends ImageView {
 				//
 				// We haven't finished zooming
 				//
-				compatPostOnAnimation(this);
+				//compatPostOnAnimation(this);
 				
 			} else {
 				//
@@ -912,12 +910,12 @@ public class TouchImageViewDefault extends ImageView {
 	            matrix.postTranslate(transX, transY);
 	            fixTrans();
 	            setImageMatrix(matrix);
-	            compatPostOnAnimation(this);
+	            //compatPostOnAnimation(this);
         	}
 		}
     }
     
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    /*@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	private void compatPostOnAnimation(Runnable runnable) {
     	if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN) {
             postOnAnimation(runnable);
@@ -925,7 +923,7 @@ public class TouchImageViewDefault extends ImageView {
         } else {
             postDelayed(runnable, 1000/60);
         }
-    }
+    }*/
     
     @SuppressWarnings("unused")
 	private void printMatrixInfo() {

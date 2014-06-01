@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Application;
 import android.content.Context;
 import android.os.Build;
+
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -17,6 +18,7 @@ public class LuvApplication extends Application{
 		
 		super.onCreate();
 		initImageLoader(getApplicationContext());
+		
 	}
 
 	public static void initImageLoader(Context context) {
@@ -26,8 +28,8 @@ public class LuvApplication extends Application{
 				.denyCacheImageMultipleSizesInMemory()
 				.discCacheFileNameGenerator(new Md5FileNameGenerator())
 				.tasksProcessingOrder(QueueProcessingType.LIFO)
-				.writeDebugLogs() // Remove for release app
+				.writeDebugLogs()
 				.build();		
-		ImageLoader.getInstance().init(config);
+		ImageLoader.getInstance().init(config);		
 	}
 }
