@@ -30,12 +30,8 @@ public class LoginActivity extends BaseActivity{
 	AccountHelper accountHelper;
 	
 	@AfterViews
-	void afterViews() {
-			
+	void afterViews() {			
 		accountHelper = new AccountHelper(getApplicationContext());
-		
-		tbxEmail.setText("admin@gmail.com");
-		tbxPassword.setText("1234567");
 	}
 	
 	@Override

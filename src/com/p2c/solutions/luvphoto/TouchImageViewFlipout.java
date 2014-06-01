@@ -5,16 +5,12 @@ import static com.p2c.solutions.luvphoto.TouchImageViewFlipout.State.DRAG;
 import static com.p2c.solutions.luvphoto.TouchImageViewFlipout.State.FLING;
 import static com.p2c.solutions.luvphoto.TouchImageViewFlipout.State.NONE;
 import static com.p2c.solutions.luvphoto.TouchImageViewFlipout.State.ZOOM;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
-import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
@@ -603,7 +599,7 @@ private static final String DEBUG = "DEBUG";
         	}
         	
         	fling = new Fling((int) velocityX, (int) velocityY);
-        	compatPostOnAnimation(fling); 
+        	//compatPostOnAnimation(fling); 
              
         	return super.onFling(event, e2, velocityX, velocityY);
         	
@@ -762,8 +758,9 @@ private static final String DEBUG = "DEBUG";
         	}
         	
         	if (animateToZoomBoundary) {
-	        	DoubleTapZoom doubleTap = new DoubleTapZoom(targetZoom, viewWidth / 2, viewHeight / 2, true);
-	        	compatPostOnAnimation(doubleTap);
+	        	@SuppressWarnings("unused")
+				DoubleTapZoom doubleTap = new DoubleTapZoom(targetZoom, viewWidth / 2, viewHeight / 2, true);
+	        	//compatPostOnAnimation(doubleTap);
         	}
         }
     }
@@ -841,7 +838,7 @@ private static final String DEBUG = "DEBUG";
 			if (t < 1f) {
 				
 				// We haven't finished zooming
-				compatPostOnAnimation(this);
+				//compatPostOnAnimation(this);
 				
 			} else {
 				
@@ -996,11 +993,11 @@ private static final String DEBUG = "DEBUG";
 	            matrix.postTranslate(transX, transY);
 	            fixTrans();
 	            setImageMatrix(matrix);
-	            compatPostOnAnimation(this);
+	            //compatPostOnAnimation(this);
         	}
 		}
     }
-    
+    /*
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	private void compatPostOnAnimation(Runnable runnable) {
     	if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN) {
@@ -1010,7 +1007,7 @@ private static final String DEBUG = "DEBUG";
             postDelayed(runnable, 1000/60);
         }
     }
-    
+    */
     @SuppressWarnings("unused")
 	private void printMatrixInfo() {
     	matrix.getValues(m);

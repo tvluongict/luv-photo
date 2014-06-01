@@ -118,8 +118,7 @@ public class LuvHorizontalListView extends AdapterView<ListAdapter>{
         //TODO: implement
     }
     
-    @SuppressWarnings("deprecation")
-	private void addAndMeasureChild(final View child, int viewPos) {
+    private void addAndMeasureChild(final View child, int viewPos) {
         LayoutParams params = child.getLayoutParams();
         if(params == null) {
             params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);

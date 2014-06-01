@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/panel_refresh"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#343843"
+    android:visibility="visible"
+    android:orientation="vertical"
+    android:gravity="center_vertical|center_horizontal"> 
+      
+    <ImageView
+       android:layout_width="60dp"
+       android:layout_height="60dp"
+       android:src="@drawable/wifi"
+       android:contentDescription="@string/lb_no_description"/>
+      
+	<com.p2c.solutions.luvphoto.LuvTextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="@string/lb_you_are_current_offline"
+       android:gravity="center"
+       android:textColor="#ffffff"/>
+
+	<com.p2c.solutions.luvphoto.LuvTextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="@string/lb_you_are_current_offline_description"
+       android:gravity="center"
+       android:textColor="#999ba1"/>
+	
+	<com.p2c.solutions.luvphoto.LuvTextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="@string/lb_refresh"
+       android:gravity="center"
+       android:textColor="#999ba1"
+       android:background="@drawable/borderstyle1"/>
+	
+  </LinearLayout>

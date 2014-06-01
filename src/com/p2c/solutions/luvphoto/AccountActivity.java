@@ -1058,18 +1058,22 @@ public class AccountActivity extends BaseActivity implements OnRefreshListener<G
 	}
 	
 	private void showAdmod(){
-		adView.loadAd(new AdRequest());
-		pnAdmod.setVisibility(View.VISIBLE);		
-		final Animation animation = AnimationUtils.loadAnimation(AccountActivity.this, R.anim.top_out);
-		Handler h = new Handler(Looper.getMainLooper());
-		Runnable r = new Runnable() {
-            @Override
-            public void run() {
-            	pnAdmod.setVisibility(View.GONE);
-            	pnAdmod.startAnimation(animation);
-            }
-        };
-        h.postDelayed(r,2000); //-- run after 8 seconds      
+		
+		if(pnAdmod.getVisibility() == View.GONE)
+		{
+			adView.loadAd(new AdRequest());
+			pnAdmod.setVisibility(View.VISIBLE);		
+			final Animation animation = AnimationUtils.loadAnimation(AccountActivity.this, R.anim.top_out);
+			Handler h = new Handler(Looper.getMainLooper());
+			Runnable r = new Runnable() {
+	            @Override
+	            public void run() {
+	            	pnAdmod.setVisibility(View.GONE);
+	            	pnAdmod.startAnimation(animation);
+	            }
+	        };
+	        h.postDelayed(r,2000); //-- run after 8 seconds
+        }            
 	}
 	
 	public class DepthPageTransformer implements ViewPager.PageTransformer {

@@ -2,9 +2,8 @@ package com.p2c.solutions.luvphoto;
 
 import greendroid.widget.ItemAdapter;
 import greendroid.widget.item.DescriptionItem;
+
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import android.content.Intent;
 import android.os.Handler;
@@ -89,12 +88,9 @@ public class MainActivity extends BaseActivity {
 				i.putExtra("Image", album.getImage());
 				startActivity(i);
 			}
-
-		});
-		
+		});	
 		Intent intent = new Intent(this, LuvPhotoNotificationService.class);
         startService(intent);
-          
         showAdmod();
 	}
 	
@@ -128,25 +124,22 @@ public class MainActivity extends BaseActivity {
 			if(albums != null && albums.size()>0)
 				displayOnViews(albums);
 			else
-				loadDataProcessFail(R.string.msg_list_album_null);
+				showToast(R.string.msg_list_album_null);
 			
 		} else if (result.getMessage() == JsonMessage.CONNECT_FAILED) {
 			loadDataProcessFail(R.string.app_global_global_networkConnectionFailed);
 		} else if (result.getMessage() == JsonMessage.RESULT_PARSE_ERROR) {
-			loadDataProcessFail(R.string.app_global_global_parseWsResultFailed);
+			showToast(R.string.app_global_global_parseWsResultFailed);
 		} else {
-			loadDataProcessFail(R.string.app_global_global_parameterWsInvalid);
+			showToast(R.string.app_global_global_parameterWsInvalid);
 		}
 	}
 	
 	@UiThread
 	public void loadDataProcessFail(int id){
-		showToast(id);
-		
 		Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.slide_in_from_bottom);
-		panelRefresh.setVisibility(View.VISIBLE);	
 		panelRefresh.startAnimation(animation);
-		
+		panelRefresh.setVisibility(View.VISIBLE);
 		btnLogin.setVisibility(View.GONE);
 	}
 	
